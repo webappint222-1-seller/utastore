@@ -1,7 +1,8 @@
 <template>
 <nav>
   <v-toolbar dark>
-    <v-toolbar-title>
+    <v-app-bar-nav-icon @click="switchLeftNavi=!switchLeftNavi"></v-app-bar-nav-icon>
+    <v-toolbar-title class="headline">
       <span>cd</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
@@ -15,6 +16,9 @@
       <span class="mr-2">Log In</span>
     </v-btn>
   </v-toolbar>
+  <v-navigation-drawer app dark v-model="switchLeftNavi">
+    <p class= "white--text">123</p>
+</v-navigation-drawer>
 </nav>
 
 
@@ -23,13 +27,19 @@
 <script>
   
   // import Member from '../components/Member'
-
+  
   export default {
     name: 'Home',
+    data() {
+      return{
+        switchLeftNavi:false
+      }
+    },
 
     components: {
       
       // Member
+    
     },
   }
 </script>
