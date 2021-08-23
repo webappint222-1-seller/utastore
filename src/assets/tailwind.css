@@ -3,3 +3,28 @@
 @tailwind components;
 
 @tailwind utilities;
+
+.home {
+    @apply
+        bg-silver
+        w-full h-full md:w-auto
+}
+.about {
+    @apply
+        bg-silver
+        w-full h-full md:w-auto
+}
+.team {
+    @apply
+        bg-silver
+        w-full h-full md:w-auto
+}
+
+.notFound {
+    @apply  bg-silver
+            flex
+            justify-center items-center
+            text-4xl font-mono
+            w-full h-full md:w-auto
+            pt-20;
+}
