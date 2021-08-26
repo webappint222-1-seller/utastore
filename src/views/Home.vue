@@ -2,8 +2,10 @@
 
   <div class="home">
     <Navbar/>
-    <v-container class="">
-
+    <v-container class="flex justify-center">
+      <v-card class="pa-4 white">
+      <p>123</p>
+      </v-card>
     </v-container>
   </div>
   

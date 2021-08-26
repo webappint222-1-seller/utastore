@@ -21,7 +21,7 @@
         <v-navigation-drawer app dark v-model="switchLeftNavi">
           <v-card dark class="mx-auto" max-width="auto" tile>
             <v-list dense>
-              <v-list-item-group v-model="selectedHome" color="white">
+              <v-list-item-group v-model="selectedHome" color="white" class="py-4">
                 <v-list-item @click="$router.push('/')">
                   <v-list-item-icon>
                     <v-icon>home</v-icon>
@@ -32,7 +32,7 @@
                 </v-list-item>
               </v-list-item-group>
   
-              <v-list-item-group v-model="selectedAbout" color="white" >
+              <v-list-item-group v-model="selectedAbout" color="white" class="py-4">
                 <v-list-item @click="$router.push('/about')">
                   <v-list-item-icon>
                     <v-icon>dashboard</v-icon>
@@ -43,7 +43,7 @@
                 </v-list-item>
               </v-list-item-group>
   
-              <v-list-item-group v-model="selectedTeam" color="white">
+              <v-list-item-group v-model="selectedTeam" color="white" class="py-4">
                 <v-list-item @click="$router.push('/team')">
                   <v-list-item-icon>
                     <v-icon>person</v-icon>
