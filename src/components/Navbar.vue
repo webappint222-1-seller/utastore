@@ -4,7 +4,7 @@
         <v-toolbar dark>
           <v-app-bar-nav-icon @click="switchLeftNavi = !switchLeftNavi"></v-app-bar-nav-icon>
           <v-toolbar-title class="headline">
-            <span class="text-lightpink"> CD-STORE</span>
+            <span class="text-lightpink">uta STORE</span>
           </v-toolbar-title>
           <v-spacer></v-spacer>
   

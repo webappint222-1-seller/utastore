@@ -18,7 +18,7 @@
     },
     components: {
         Navbar
-      // Member
+      
   
     },
   }
