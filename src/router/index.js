@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Team from '../views/Team.vue'
 import NotFound from '../views/NotFound.vue'
+import LoginPage from '../views/LoginPage'
+import RegisterPage from '../views/RegisterPage'
 
 Vue.use(VueRouter)
 
@@ -22,6 +24,16 @@ const routes = [
     path: '/team',
     name: 'Team',
     component: Team
+  },
+  {
+    path: '/loginpage',
+    name: 'LoginPage',
+    component: LoginPage
+  },
+  {
+    path: '/registerpage',
+    name: 'RegisterPage',
+    component: RegisterPage
   },
   {
     path: '/:catchNotMatchPath(.*)',
