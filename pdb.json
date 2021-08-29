@@ -1,0 +1,18 @@
+{
+  "productInfo": [
+    {
+      "name": "Sakaseya Sakase [Regular Edition]",
+      "band": "EGOIST",
+      "price": "1204yen",
+      "des": "Much anticipated new release featured as main theme to hit anime's theatrical release.",
+      "id": 1
+    },
+    {
+      "name": "dsdad",
+      "band": "dasdada",
+      "price": "123",
+      "des": "adadadad",
+      "id": 2
+    }
+  ]
+}

@@ -4,19 +4,18 @@
     <v-container class="flex">
       <v-flex xs12 sm12 md12 lg12 class="justify-center">
         <v-btn dark v-show="!addedit" v-on:click="toggleDone()">
-          
           <span>add</span>
-        </v-btn>        
-        
+        </v-btn>
+
         <v-btn dark v-on:click="toggleDone()">
           <div v-show="addedit"></div>
           <span>cancel</span>
         </v-btn>
-        <v-card dark class="w-80 h-auto mt-20" v-show="addedit">
+        <v-card dark class="w-80 h-auto mt-20">
           <v-card-text>
             <form>
               <v-text-field
-                v-model="name"
+                v-model="nameForm"
                 :error-messages="nameErrors"
                 label="Product Name"
                 required
@@ -26,7 +25,7 @@
               ></v-text-field>
 
               <v-text-field
-                v-model="band"
+                v-model="bandForm"
                 :error-messages="bandErrors"
                 label="Band Name"
                 required
@@ -36,7 +35,7 @@
               ></v-text-field>
 
               <v-text-field
-                v-model="price"
+                v-model="priceForm"
                 :error-messages="priceErrors"
                 label="Price"
                 required
@@ -46,7 +45,7 @@
               ></v-text-field>
 
               <v-textarea
-                v-model="des"
+                v-model="desForm"
                 :error-messages="desErrors"
                 :counter="1000"
                 label="Producr Description"
@@ -56,8 +55,8 @@
                 @blur="$v.des.$touch()"
               ></v-textarea>
 
-              <v-btn class="mr-4" @click="submit">submit</v-btn>
-              <v-btn @click="clear">clear</v-btn>
+              <v-btn class="mr-4" @click.prevent="submitProductForm">Submit</v-btn>
+              <v-btn @click="clear">Clear</v-btn>
             </form>
           </v-card-text>
         </v-card>
@@ -77,6 +76,31 @@
                 <li class="pt-2">{{ i.band }}</li>
                 <li class="pt-2">{{ i.price }}</li>
                 <li class="pt-2">{{ i.des }}</li>
+              </ul>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="#FFB6C1">
+                <v-icon>shopping_cart</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <!-- ---------------------------------------------------------------------------------------------------------- -->
+    <v-container class="flex">
+      <v-layout row wrap>
+        <v-flex xs12 sm12 md4 lg4 wrap v-for="e in productInfo" :key="e.id" class="justify-center">
+          <v-card dark flat class="pa-2 w-64 h-auto mt-20">
+            <v-responsive>
+              <!-- <img :src="e.pic" class="w-60 h-60" /> -->
+            </v-responsive>
+            <v-card-text class="justify-center text-sm break-words white--text">
+              <ul>
+                <li>{{ e.name }}</li>
+                <li class="pt-2">{{ e.band }}</li>
+                <li class="pt-2">{{ e.price }}</li>
+                <li class="pt-2">{{ e.des }}</li>
               </ul>
             </v-card-text>
             <v-card-actions>
@@ -109,10 +133,12 @@ export default {
       ],
       addedit: false,
       cancel: false,
-      name: '',
-      band: '',
-      price: '',
-      des: '',
+      nameForm: '',
+      bandForm: '',
+      priceForm: '',
+      desForm: '',
+      productInfo: [],
+      url: 'http://localhost:5001/productInfo'
 
     }
 
@@ -162,10 +188,8 @@ export default {
   },
 
   methods: {
-    submit() {
-      this.$v.$touch()
+    // submit() {
 
-    },
     clear() {
       this.$v.$reset()
       this.name = ''
@@ -173,6 +197,63 @@ export default {
       this.price = ''
       this.des = ''
 
+    },
+
+    submitProductForm() {
+      this.$v.$touch()
+      this.nameErrors = this.nameForm === ''
+      this.bandErrors = this.bandForm === ''
+      this.priceErrors = this.priceForm === ''
+      this.desErrors = this.desForm === ''
+
+      console.log(`productName: ${this.nameForm}`)
+      console.log(`bandName: ${this.bandForm}`)
+      console.log(`productPrice: ${this.priceForm}`)
+      console.log(`productDes: ${this.desForm}`)
+
+      if (this.Formname !== '' &&
+        this.bandForm !== '' &&
+        this.priceForm !== '' &&
+        this.desForm !== '') {
+        // this.productInfo.push({
+        //   name: this.nameForm,
+        //   band: this.bandForm,
+        //   price: this.priceForm,
+        //   des: this.desForm
+
+        // })
+        this.addNewProductForm({
+          name: this.nameForm,
+          band: this.bandForm,
+          price: this.priceForm,
+          des: this.desForm
+        })
+      }
+      this.nameForm = '',
+        this.bandForm = '',
+        this.priceForm = '',
+        this.desForm = ''
+
+    },
+
+    async addNewProductForm(newProductForm) {
+      try {
+        const res = await fetch(this.url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: newProductForm.name,
+            band: newProductForm.band,
+            price: newProductForm.price,
+            des: newProductForm.des
+          })
+        })
+        const data = await res.json()
+        this.productInfo = [...this.productInfo, data]
+      }
+      catch (error) { console.log(`save failed: ${error}`) }
     },
 
     toggleDone() {

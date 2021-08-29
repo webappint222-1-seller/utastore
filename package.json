@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "authen": "json-server --watch db.json --port 5000"
+    "backend": "json-server --watch db.json --port 5000",
+    "pbackend": "json-server --watch pdb.json --port 5001"
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.2",
