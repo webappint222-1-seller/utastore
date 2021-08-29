@@ -2,14 +2,17 @@
   <div class="home">
     <Navbar />
     <v-container class="flex">
-      <v-btn dark v-show="!addedit" v-on:click="toggleDone()">
-      <span>add</span>
-      </v-btn>
-      <v-btn dark v-on:click="toggleDone()">
-      <span>cancel</span>
-      </v-btn>     
-      <v-flex xs12 sm12 md12 lg12 class= "justify-center">
-        <v-card dark class= "w-80 h-auto mt-20" v-show="addedit">
+      <v-flex xs12 sm12 md12 lg12 class="justify-center">
+        <v-btn dark v-show="!addedit" v-on:click="toggleDone()">
+          
+          <span>add</span>
+        </v-btn>        
+        
+        <v-btn dark v-on:click="toggleDone()">
+          <div v-show="addedit"></div>
+          <span>cancel</span>
+        </v-btn>
+        <v-card dark class="w-80 h-auto mt-20" v-show="addedit">
           <v-card-text>
             <form>
               <v-text-field
@@ -59,7 +62,7 @@
           </v-card-text>
         </v-card>
       </v-flex>
-  </v-container>
+    </v-container>
 
     <v-container class="flex">
       <v-layout row wrap>
@@ -77,7 +80,7 @@
               </ul>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="primary">
+              <v-btn color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
             </v-card-actions>
@@ -105,6 +108,7 @@ export default {
         { title: "RELOADED [Regular Edition]", band: "EGOIST", price: "1300yen", des: "New single release from Egoist is used as main theme for Project Itoh anime.", pic: "SRCL-8927.jpg" },
       ],
       addedit: false,
+      cancel: false,
       name: '',
       band: '',
       price: '',

@@ -12,7 +12,15 @@
         <span class="mr-2">Google</span>
       </v-btn>
           -->
-          <v-btn>
+          <v-btn @click="$router.push('/billpage')">
+            <v-icon left>shopping_basket</v-icon>
+            
+          </v-btn>
+          <v-btn @click="$router.push('/registerpage')">
+            <v-icon left>account_circle</v-icon>
+            <span class="mr-2">create account</span>
+          </v-btn>
+          <v-btn @click="$router.push('/loginpage')">
             <v-icon left>login</v-icon>
             <span class="mr-2">Log In</span>
           </v-btn>
