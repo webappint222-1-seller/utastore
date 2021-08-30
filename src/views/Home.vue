@@ -13,56 +13,67 @@
         </v-btn>
         <v-card dark class="w-80 h-auto mt-20">
           <v-card-text>
-            <form>
-              <v-text-field
-                v-model="nameForm"
-                :error-messages="nameErrors"
-                label="Product Name"
-                required
-                single-line
-                @input="$v.name.$touch()"
-                @blur="$v.name.$touch()"
-              ></v-text-field>
+            <validation-observer ref="observer" v-slot="{ invalid }">
+              <form>
+                <validation-provider v-slot="{ errors }" name="Product Name" rules="required">
+                  <v-text-field
+                    v-model="nameForm"
+                    :error-messages="errors"
+                    label="Product Name"
+                    required
+                    single-line                  
+                  ></v-text-field>
+                </validation-provider>
 
-              <v-text-field
-                v-model="bandForm"
-                :error-messages="bandErrors"
-                label="Band Name"
-                required
-                single-line
-                @input="$v.band.$touch()"
-                @blur="$v.band.$touch()"
-              ></v-text-field>
+                <validation-provider v-slot="{ errors }" name="Band Name" rules="required">
+                  <v-text-field
+                    v-model="bandForm"
+                    :error-messages="errors"
+                    label="Band Name"
+                    required
+                    single-line                    
+                  ></v-text-field>
+                </validation-provider>
 
-              <v-text-field
-                v-model="priceForm"
-                :error-messages="priceErrors"
-                label="Price"
-                required
-                single-line
-                @input="$v.price.$touch()"
-                @blur="$v.price.$touch()"
-              ></v-text-field>
+                <validation-provider v-slot="{ errors }" name="Price" rules="required|numeric">
+                  <v-text-field
+                    v-model="priceForm"
+                    :error-messages="errors"
+                    label="Price"
+                    required
+                    single-line                    
+                  ></v-text-field>
+                </validation-provider>
 
-              <v-textarea
-                v-model="desForm"
-                :error-messages="desErrors"
-                :counter="1000"
-                label="Producr Description"
-                required
-                single-line
-                @input="$v.des.$touch()"
-                @blur="$v.des.$touch()"
-              ></v-textarea>
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="Product Description"
+                  rules="required|max:1000"
+                >
+                  <v-textarea
+                    v-model="desForm"
+                    :error-messages="errors"
+                    :counter="1000"
+                    label="Producr Description"
+                    required
+                    single-line                    
+                  ></v-textarea>
+                </validation-provider>
 
-              <v-btn class="mr-4" @click.prevent="submitProductForm">Submit</v-btn>
-              <v-btn @click="clear">Clear</v-btn>
-            </form>
+                <v-btn
+                  class="mr-4"
+                  @click.prevent="submitProductForm"
+                  type="submit"
+                  :disabled="invalid"
+                >Submit</v-btn>
+                <v-btn @click="clear">Clear</v-btn>
+              </form>
+            </validation-observer>
           </v-card-text>
         </v-card>
       </v-flex>
     </v-container>
-
+    <!-- Example -->
     <v-container class="flex">
       <v-layout row wrap>
         <v-flex xs12 sm12 md4 lg4 wrap v-for="i in products" :key="i.title" class="justify-center">
@@ -118,8 +129,25 @@
 <script>
 
 import Navbar from '@/components/Navbar.vue'
-import { validationMixin } from 'vuelidate'
-import { required, maxLength, numeric } from 'vuelidate/lib/validators'
+import { required, max, numeric } from 'vee-validate/dist/rules'
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+
+setInteractionMode('eager')
+
+extend('required', {
+  ...required,
+  message: '{_field_} can not be empty',
+})
+
+extend('max', {
+  ...max,
+  message: '{_field_} may not be greater than {length} characters',
+})
+
+extend('numeric', {
+  ...numeric,
+  message: '{_field_}  must be number',
+})
 
 export default {
   name: 'Home',
@@ -144,54 +172,23 @@ export default {
 
   },
 
-  computed: {
-    nameErrors() {
-      const errors = []
-      if (!this.$v.name.$dirty) return errors
-      !this.$v.name.required && errors.push('Name is required.')
-      return errors
-    },
-
-    bandErrors() {
-      const errors = []
-      if (!this.$v.band.$dirty) return errors
-      !this.$v.band.required && errors.push('Band is required.')
-      return errors
-    },
-
-    priceErrors() {
-      const errors = []
-      if (!this.$v.price.$dirty) return errors
-      !this.$v.price.numeric && errors.push('Price must be number.')
-      !this.$v.price.required && errors.push('Price is required.')
-      return errors
-    },
-
-    desErrors() {
-      const errors = []
-      if (!this.$v.des.$dirty) return errors
-      !this.$v.des.maxLength && errors.push('Description must be at most 1000 characters long.')
-      !this.$v.des.required && errors.push('Description is required.')
-      return errors
-    },
+  components: {
+    Navbar,
+    ValidationProvider,
+    ValidationObserver,
+    // Member
 
   },
 
-  mixins: [validationMixin],
-
-  validations: {
-    name: { required },
-    band: { required },
-    price: { required, numeric },
-    des: { required, maxLength: maxLength(1000) }
+  computed: {
 
   },
 
   methods: {
-    // submit() {
+
 
     clear() {
-      this.$v.$reset()
+      this.$refs.observer.reset()
       this.name = ''
       this.band = ''
       this.price = ''
@@ -200,7 +197,7 @@ export default {
     },
 
     submitProductForm() {
-      this.$v.$touch()
+      this.$refs.observer.validate()
       this.nameErrors = this.nameForm === ''
       this.bandErrors = this.bandForm === ''
       this.priceErrors = this.priceForm === ''
@@ -234,6 +231,9 @@ export default {
         this.priceForm = '',
         this.desForm = ''
 
+      requestAnimationFrame(() => {
+        this.$refs.observer.reset();
+      });
     },
 
     async addNewProductForm(newProductForm) {
@@ -261,10 +261,6 @@ export default {
     },
   },
 
-  components: {
-    Navbar
-    // Member
-
-  },
+ 
 }
 </script>

@@ -1,19 +1,40 @@
+
 {
-  "posts": [
+  "infoAccounts": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
+      "username": "admin",
+      "password": "password",
+      "firstname": "สมชาย",
+      "lastname": "หมายรัก",
+      "nickname": "ฝักทอง",
+      "tel": "0123456789",
+      "id": 1
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "username": "Roninza007",
+      "password": "pop123",
+      "firstname": "ประยุทธ์",
+      "lastname": "มุดดินหนี",
+      "nickname": "ค้อม",
+      "tel": "0123456789",
+      "id": 2
+    },
+    {
+      "username": "NeedSomeBody",
+      "password": "lnwza555",
+      "firstname": "สมหญิง",
+      "lastname": "ขิงไม่ชอบ",
+      "nickname": "หญิง",
+      "tel": "0123456789",
+      "id": 3
+    },
+    {
+      "username": "abcdefg",
+      "password": "123465",
+      "firstname": "QQQQ",
+      "lastname": "WWWW",
+      "tel": "1234567890",
+      "id": 4
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }
