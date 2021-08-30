@@ -1,8 +1,8 @@
 <template>
   <div class="team">
-    <Navbar />
-    <Member />
-  </div>
+    <Navbar/>
+    <Member/>        
+    </div>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
   components: {
     Navbar,
     Member
-
+  
   },
 }
 </script>

@@ -8,7 +8,7 @@
 <script>
 
   import Navbar from '@/components/Navbar.vue'
-  
+
   export default {
     name: 'About',
     data() {
@@ -17,9 +17,8 @@
       }
     },
     components: {
-        Navbar
+        Navbar,      
       
-  
     },
   }
   </script>

@@ -123,12 +123,14 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <Footer/>
   </div>
 </template>
 
 <script>
 
 import Navbar from '@/components/Navbar.vue'
+import Footer from '@/components/Footer.vue'
 import { required, max, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 
@@ -174,6 +176,7 @@ export default {
 
   components: {
     Navbar,
+    Footer,
     ValidationProvider,
     ValidationObserver,
     // Member
@@ -185,7 +188,6 @@ export default {
   },
 
   methods: {
-
 
     clear() {
       this.$refs.observer.reset()
