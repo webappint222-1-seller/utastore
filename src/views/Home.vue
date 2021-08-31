@@ -21,7 +21,7 @@
                     :error-messages="errors"
                     label="Product Name"
                     required
-                    single-line                  
+                    single-line
                   ></v-text-field>
                 </validation-provider>
 
@@ -31,7 +31,7 @@
                     :error-messages="errors"
                     label="Band Name"
                     required
-                    single-line                    
+                    single-line
                   ></v-text-field>
                 </validation-provider>
 
@@ -41,7 +41,7 @@
                     :error-messages="errors"
                     label="Price"
                     required
-                    single-line                    
+                    single-line
                   ></v-text-field>
                 </validation-provider>
 
@@ -56,7 +56,7 @@
                     :counter="1000"
                     label="Producr Description"
                     required
-                    single-line                    
+                    single-line
                   ></v-textarea>
                 </validation-provider>
 
@@ -77,7 +77,7 @@
     <v-container class="flex">
       <v-layout row wrap>
         <v-flex xs12 sm12 md4 lg4 wrap v-for="i in products" :key="i.title" class="justify-center">
-          <v-card dark flat class="pa-2 w-64 h-auto mt-20">
+          <v-card dark flat class="pa-2 w-64 h-auto my-10">
             <v-responsive>
               <img :src="i.pic" class="w-60 h-60" />
             </v-responsive>
@@ -101,29 +101,44 @@
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <v-container class="flex">
       <v-layout row wrap>
-        <v-flex xs12 sm12 md4 lg4 wrap v-for="e in productInfo" :key="e.id" class="justify-center">
-          <v-card dark flat class="pa-2 w-64 h-auto mt-20">
+        <v-flex
+          xs12
+          sm12
+          md4
+          lg4
+          wrap
+          v-for="uta in productInfo"
+          :key="uta.id"
+          class="justify-center"
+        >
+          <v-card dark flat class="pa-2 w-64 h-auto my-10">
             <v-responsive>
               <!-- <img :src="e.pic" class="w-60 h-60" /> -->
             </v-responsive>
             <v-card-text class="justify-center text-sm break-words white--text">
               <ul>
-                <li>{{ e.name }}</li>
-                <li class="pt-2">{{ e.band }}</li>
-                <li class="pt-2">{{ e.price }}</li>
-                <li class="pt-2">{{ e.des }}</li>
+                <li>{{ uta.name }}</li>
+                <li class="pt-2">{{ uta.band }}</li>
+                <li class="pt-2">{{ uta.price }}yen</li>
+                <li class="pt-2">{{ uta.des }}</li>
               </ul>
             </v-card-text>
             <v-card-actions>
               <v-btn color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
+              <v-btn color="yellow darken-4">
+                <v-icon>edit</v-icon>
+              </v-btn>
+              <v-btn @click="deleteProduct(uta.id)" color="red darken-4">
+                <v-icon>delete</v-icon>
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
-    <Footer/>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -148,7 +163,7 @@ extend('max', {
 
 extend('numeric', {
   ...numeric,
-  message: '{_field_}  must be number',
+  message: '{_field_} must be number',
 })
 
 export default {
@@ -188,6 +203,10 @@ export default {
   },
 
   methods: {
+
+    toggleDone() {
+      this.addedit = !this.addedit
+    },
 
     clear() {
       this.$refs.observer.reset()
@@ -238,6 +257,7 @@ export default {
       });
     },
 
+    // POST
     async addNewProductForm(newProductForm) {
       try {
         const res = await fetch(this.url, {
@@ -258,11 +278,43 @@ export default {
       catch (error) { console.log(`save failed: ${error}`) }
     },
 
-    toggleDone() {
-      this.addedit = !this.addedit
+    // GET
+    async getProductForm() {
+      try {
+        const res = await fetch(this.url)
+        const getdata = await res.json()
+        return getdata
+      }
+      catch (error) { console.log(`get failed: ${error}`) }
     },
+
+    // DELETE
+    async deleteProduct(deleteId) {
+      try {
+        await fetch(`${this.url}/${deleteId}`, {
+          method: 'DELETE'
+        })
+        this.productInfo = this.productInfo.filter(uta => uta.id !== deleteId)
+        this.reload()
+      }
+      catch (error) {
+        console.log(`delete failed: ${error}`)
+      }
+    },
+
+    async reload() {
+      this.productInfo = await this.getProductForm()
+    },
+
+
+
   },
 
- 
+  // GET
+  async created() {
+    this.productInfo = await this.getProductForm()
+
+  }
+
 }
 </script>
