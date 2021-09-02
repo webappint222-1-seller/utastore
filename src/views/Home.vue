@@ -127,7 +127,7 @@
               <v-btn color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
-              <v-btn color="yellow darken-4">
+              <v-btn @click="showProduct(uta)" color="yellow darken-4">
                 <v-icon>edit</v-icon>
               </v-btn>
               <v-btn @click="deleteProduct(uta.id)" color="red darken-4">
@@ -183,6 +183,8 @@ export default {
       priceForm: '',
       desForm: '',
       productInfo: [],
+      inEditMode: false,
+      editId: '',
       url: 'http://localhost:5001/productInfo'
 
     }
@@ -240,12 +242,26 @@ export default {
         //   des: this.desForm
 
         // })
-        this.addNewProductForm({
-          name: this.nameForm,
-          band: this.bandForm,
-          price: this.priceForm,
-          des: this.desForm
-        })
+        // EDIT-2
+        if (this.inEditMode) {
+          this.editProduct({
+            id: this.editId,
+            name: this.nameForm,
+            band: this.bandForm,
+            price: this.priceForm,
+            des: this.desForm
+          })
+        }
+        else {
+          this.addNewProductForm({
+            name: this.nameForm,
+            band: this.bandForm,
+            price: this.priceForm,
+            des: this.desForm
+          })
+        }
+
+
       }
       this.nameForm = '',
         this.bandForm = '',
@@ -306,11 +322,58 @@ export default {
       this.productInfo = await this.getProductForm()
     },
 
+    // EDIT
+    showProduct(utaInfo) {
+      this.inEditMode = true
+      this.editId = utaInfo.id
+      this.nameForm = utaInfo.name
+      this.bandForm = utaInfo.band
+      this.priceForm = utaInfo.price
+      this.desForm = utaInfo.des
+    },
+
+    async editProduct(shinInfo) {
+      try {
+        const res = await fetch(`${this.url}/${shinInfo.id}`, {
+          method: 'PUT',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: shinInfo.name,
+            band: shinInfo.band,
+            price: shinInfo.price,
+            des: shinInfo.des
+          })
+        })
+        const data = await res.json()
+        this.productInfo = this.productInfo.map(uta => uta.id === shinInfo.id ?
+          {
+            ...uta,
+            name: data.name,
+            band: data.band,
+            price: data.price,
+            des: data.des
+          } : uta
+        )
+        this.inEditMode=false
+        this.editId=''
+        this.nameForm=''
+        this.bandform=''
+        this.priceForm=''
+        this.desForm=''
+
+
+      }
+      catch (error) {
+        console.log(`edit failed: ${error}`)
+      }
+    },
 
 
   },
 
-  // GET
+  // GET-2
   async created() {
     this.productInfo = await this.getProductForm()
 
