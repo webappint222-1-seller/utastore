@@ -3,90 +3,112 @@
     <Navbar />
     <v-container class="flex">
       <v-flex xs12 sm12 md12 lg12 class="justify-center">
-        <v-btn dark v-show="!addedit" v-on:click="toggleDone()">
-          <span>add</span>
+        <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-4">
+          <span>add / edit</span>
         </v-btn>
 
-        <v-btn dark v-on:click="toggleDone()">
-          <div v-show="addedit"></div>
-          <span>cancel</span>
-        </v-btn>
-        <v-card dark class="w-80 h-auto mt-20">
-          <v-card-text>
-            <validation-observer ref="observer" v-slot="{ invalid }">
-              <form>
-                <validation-provider v-slot="{ errors }" name="Product Name" rules="required">
-                  <v-text-field
-                    v-model="nameForm"
+        <div v-show="addedit" class="justify-end">
+          <v-btn dark v-on:click="toggleDone()" class="mt-4 ml-28">
+            <span>cancel</span>
+          </v-btn>
+          <v-card dark class="w-80 h-auto mt-10">
+            <v-card-text>
+              <validation-observer ref="observer" v-slot="{ invalid }">
+                <form>
+                  <validation-provider v-slot="{ errors }" name="Product Name" rules="required">
+                    <v-text-field
+                      v-model="nameForm"
+                      :error-messages="errors"
+                      label="Product Name"
+                      required
+                      single-line
+                    ></v-text-field>
+                  </validation-provider>
+
+                  <validation-provider v-slot="{ errors }" name="Band Name" rules="required">
+                    <v-text-field
+                      v-model="bandForm"
+                      :error-messages="errors"
+                      label="Band Name"
+                      required
+                      single-line
+                    ></v-text-field>
+                  </validation-provider>
+
+                  <validation-provider v-slot="{ errors }" name="Price" rules="required|numeric">
+                    <v-text-field
+                      v-model="priceForm"
+                      :error-messages="errors"
+                      label="Price"
+                      required
+                      single-line
+                    ></v-text-field>
+                  </validation-provider>
+
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="Product Description"
+                    rules="required|max:1000"
+                  >
+                    <v-textarea
+                      v-model="desForm"
+                      :error-messages="errors"
+                      :counter="1000"
+                      label="Producr Description"
+                      required
+                      single-line
+                    ></v-textarea>
+                  </validation-provider>
+
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="Product Image"
+                    rules="required"
+                  >
+                  <v-file-input
+                    
                     :error-messages="errors"
-                    label="Product Name"
+                    label="Image Input"
+                    filled
                     required
                     single-line
-                  ></v-text-field>
-                </validation-provider>
+                    prepend-icon="mdi-camera"
+                    
+                  >
+                  
+                  </v-file-input>
+                  
+                  </validation-provider>
 
-                <validation-provider v-slot="{ errors }" name="Band Name" rules="required">
-                  <v-text-field
-                    v-model="bandForm"
-                    :error-messages="errors"
-                    label="Band Name"
-                    required
-                    single-line
-                  ></v-text-field>
-                </validation-provider>
-
-                <validation-provider v-slot="{ errors }" name="Price" rules="required|numeric">
-                  <v-text-field
-                    v-model="priceForm"
-                    :error-messages="errors"
-                    label="Price"
-                    required
-                    single-line
-                  ></v-text-field>
-                </validation-provider>
-
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="Product Description"
-                  rules="required|max:1000"
-                >
-                  <v-textarea
-                    v-model="desForm"
-                    :error-messages="errors"
-                    :counter="1000"
-                    label="Producr Description"
-                    required
-                    single-line
-                  ></v-textarea>
-                </validation-provider>
-
-                <v-btn
-                  class="mr-4"
-                  @click.prevent="submitProductForm"
-                  type="submit"
-                  :disabled="invalid"
-                >Submit</v-btn>
-                <v-btn @click="clear">Clear</v-btn>
-              </form>
-            </validation-observer>
-          </v-card-text>
-        </v-card>
+                  <v-btn
+                    class="mr-4"
+                    @click.prevent="submitProductForm"
+                    type="submit"
+                    :disabled="invalid"
+                  >Submit</v-btn>
+                  <v-btn @click="clear">Clear</v-btn>
+                </form>
+              </validation-observer>
+            </v-card-text>
+          </v-card>
+        </div>
       </v-flex>
     </v-container>
+    <!-- ----------------------------------------------------------------------------------------------------------- -->
     <!-- Example -->
     <v-container class="flex">
       <v-layout row wrap>
-        <v-flex xs12 sm12 md4 lg4 wrap v-for="i in products" :key="i.title" class="justify-center">
+        <v-flex xs12 sm12 md4 lg4 wrap v-for="p in products" :key="p.title" class="justify-center">
           <v-card dark flat class="pa-2 w-64 h-auto my-10">
             <v-responsive>
-              <img :src="i.pic" class="w-60 h-60" />
+              <img :src="p.pic" class="w-60 h-60" />
             </v-responsive>
             <v-card-text class="justify-center text-sm break-words white--text">
               <ul>
-                <li>{{ i.title }}</li>
-                <li class="pt-2">{{ i.band }}</li>
-                <li class="pt-2">{{ i.price }}</li>
-                <li class="pt-2">{{ i.des }}</li>
+                <li>{{ p.title }}</li>
+                <li class="pt-2">{{ p.band }}</li>
+                <li class="pt-2">{{ p.price }}</li>
+                <li class="pt-2">{{ p.des }}</li>
               </ul>
             </v-card-text>
             <v-card-actions>
@@ -182,9 +204,11 @@ export default {
       bandForm: '',
       priceForm: '',
       desForm: '',
+      
       productInfo: [],
       inEditMode: false,
       editId: '',
+      i: 'https://files.catbox.moe/vq3v5e.png',
       url: 'http://localhost:5001/productInfo'
 
     }
@@ -356,12 +380,12 @@ export default {
             des: data.des
           } : uta
         )
-        this.inEditMode=false
-        this.editId=''
-        this.nameForm=''
-        this.bandform=''
-        this.priceForm=''
-        this.desForm=''
+        this.inEditMode = false
+        this.editId = ''
+        this.nameForm = ''
+        this.bandform = ''
+        this.priceForm = ''
+        this.desForm = ''
 
 
       }
