@@ -1,6 +1,6 @@
 <template>
 <div class= "footer">
-    <v-footer dark padless cols="auto">
+    <v-footer dark padless cols="auto" absolute bottom>
         
             <v-layout flex-row wrap justify-center no-gutter>
             <v-btn class="my-2" @click="$router.push('/')">

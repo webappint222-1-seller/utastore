@@ -96,7 +96,7 @@
     </v-container>
     <!-- ----------------------------------------------------------------------------------------------------------- -->
     <!-- Example -->
-    <v-container class="flex">
+    <v-container class="flex mb-40">
       <v-layout row wrap>
         <v-flex xs12 sm12 md4 lg4 wrap v-for="p in products" :key="p.title" class="justify-center">
           <v-card dark flat class="pa-2 w-64 h-auto my-10">
@@ -121,7 +121,7 @@
       </v-layout>
     </v-container>
     <!-- ---------------------------------------------------------------------------------------------------------- -->
-    <v-container class="flex">
+    <v-container class="flex mb-40">
       <v-layout row wrap>
         <v-flex
           xs12
@@ -159,7 +159,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
+    </v-container>    
     <Footer></Footer>
   </div>
 </template>
