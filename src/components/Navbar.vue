@@ -1,10 +1,12 @@
 <template>
   <div class="navbar">
     <nav>
-      <v-toolbar dark>
+      <v-toolbar dark xs2>
         <v-app-bar-nav-icon @click="switchLeftNavi = !switchLeftNavi"></v-app-bar-nav-icon>
         <v-toolbar-title class="headline">
-          <span class="text-lightpink">uta STORE</span>
+          
+          <span @click="$router.push('/')" class="text-lightpink hidden-xs-only">uta STORE</span>
+          
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
