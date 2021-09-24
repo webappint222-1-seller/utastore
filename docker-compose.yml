@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  backend:
+    container_name: backend
+    build: 
+      context: ./backend
+    image: devops_backend
+    ports:
+      - "3006:3006"
+  fontend:
+    container_name: fontend
+    build:
+      context: ./FontEnd
+    image: devops_fontend
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on: 
+      - backend
+
+
+networks:
+  default:
+    external:
+      name: project-network
