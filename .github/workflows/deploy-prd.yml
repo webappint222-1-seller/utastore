@@ -13,12 +13,12 @@ jobs:
         with:
           install: true
 
-      - name: Run test
-      run: |
+      - 
+        run: |
         echo --- Running test cases ---
         docker-compose -f ./utastore/docker-compose.yml -p testing up --build --exit-code-from api-test
         echo --- Completed test cases ---
 
-      - name: build
+      - 
         run : |
           docker-compose build
