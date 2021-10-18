@@ -27,7 +27,11 @@ jobs:
         run: docker network create project-network        
       - name: Build the stack
         run: docker-compose up -d
-      - name: Test
-        run: docker run --network container:fontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:80/
+      - name: install nmap
+        run: sudo apt-get install nmap
+      - name: Test 1
+        run: nmap -p 443 localhost
       - name: Test 2
+        run: nmap -p 3006 localhost
+      - name: Test 3
         run: docker ps
