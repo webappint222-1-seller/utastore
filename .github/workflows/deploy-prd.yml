@@ -18,7 +18,6 @@ jobs:
           compose-file: './docker-compose.yml'
           build-flags: '--volumes'
     steps:
-      - uses: isbang/compose-action@v1.0.0
         with:
           compose-file: './docker-compose.yml'
           up-flags: '--volumes'
