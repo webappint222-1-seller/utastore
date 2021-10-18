@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Build the stack
+      - name: Create network
         run: docker network create project-network        
       - name: Build the stack
         run: docker-compose up -d
