@@ -14,10 +14,8 @@ jobs:
           docker run --rm hello-world
     steps:
       - uses: isbang/compose-action@v1.0.0
-        with:
-          compose-file: './docker-compose.yml'
-          build-flags: '--volumes'
+        run: |
+          docker-compose build
     steps:
-        with:
-          compose-file: './docker-compose.yml'
-          up-flags: '--volumes'
+        run: |
+          docker-compose up -d
