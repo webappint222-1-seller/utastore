@@ -20,6 +20,7 @@ jobs:
             cli-args: "build"
 
       - name: docker-compose up
+        uses: sudo-bot/action-docker-compose@latest
          with:
             # https://docs.docker.com/compose/reference/overview/
             cli-args: "up"
