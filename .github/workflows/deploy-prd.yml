@@ -13,12 +13,13 @@ jobs:
         with:
           install: true
 
-      - 
-        run: |
-        echo --- Running test cases ---
-        docker-compose -f ./utastore/docker-compose.yml -p testing up --build --exit-code-from api-test
-        echo --- Completed test cases ---
+      - name: docker-compose build 
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+            # https://docs.docker.com/compose/reference/overview/
+            cli-args: "build"
 
-      - 
-        run : |
-          docker-compose build
+      - name: docker-compose up
+         with:
+            # https://docs.docker.com/compose/reference/overview/
+            cli-args: "up"
