@@ -19,7 +19,7 @@ jobs:
             # https://docs.docker.com/compose/reference/overview/
             cli-args: "build"
   test:
-    need: build
+    needs: build
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
