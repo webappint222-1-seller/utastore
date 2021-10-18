@@ -10,11 +10,11 @@ jobs:
       - name: Build docker
       run: | 
         echo ---Building and starting up docker---
-        docker-compose -f ./utastore/docker-compose.yml -p testing up -d
+        docker-compose build
         echo ---Containers up---
 
       - name: Run test
       run: |
         echo --- Running test cases ---
-        docker-compose -f ./utastore/docker-compose.yml -p testing up --build --exit-code-from api-test
+        docker-compose up -d
         echo --- Completed test cases ---
