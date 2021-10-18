@@ -1,0 +1,20 @@
+name: deploy-prd
+on: [push]  
+jobs:
+  deploy-prd:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: Build docker
+      run: | 
+        echo ---Building and starting up docker---
+        docker-compose -f ./utastore/docker-compose.yml -p testing up -d
+        echo ---Containers up---
+
+      - name: Run test
+      run: |
+        echo --- Running test cases ---
+        docker-compose -f ./utastore/docker-compose.yml -p testing up --build --exit-code-from api-test
+        echo --- Completed test cases ---
