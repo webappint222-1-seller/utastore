@@ -19,10 +19,12 @@ jobs:
             # https://docs.docker.com/compose/reference/overview/
             cli-args: "build"
   test:
+    need: build
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: Build the stack
         run: docker-compose up -d
+        run: docker network create project-network
       - name: Test
         run: docker run --network container:webapp-frontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:433/
