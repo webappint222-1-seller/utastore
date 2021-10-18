@@ -18,3 +18,7 @@ jobs:
         with:
             # https://docs.docker.com/compose/reference/overview/
             cli-args: "build"
+      - name: docker-compose up
+        run: docker-compose up -d
+       - name: Test
+        run: docker run --network container:webapp-frontend appropriate/curl -s --retry 10 --retry-connrefused https://localhost:443/
