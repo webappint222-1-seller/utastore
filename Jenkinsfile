@@ -17,13 +17,5 @@ pipeline {
                 echo '******************************'
             }
         }
- 
-        stage('Docker Deploy') {
-            steps {
-                sh 'docker-compose up -d'
-                echo '******************************'
-            }
-        }
- 
     }
 }
