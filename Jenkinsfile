@@ -11,26 +11,19 @@ pipeline {
             }
         }
  
-        stage('Yarn Install') {
+        stage('Docker Build') {
             steps {
-                echo 'Yarn Install'
+                sh 'docker-compose build'
                 echo '******************************'
             }
         }
  
-        stage('Yarn Build') {
+        stage('Docker Deploy') {
             steps {
-                echo 'Yarn Build'
+                sh 'docker-compose up -d'
                 echo '******************************'
             }
         }
  
- 
-        stage('Deploy') {
-            steps{
-                echo 'Deploy'
-                echo '******************************'
-            }
-        }
     }
 }
