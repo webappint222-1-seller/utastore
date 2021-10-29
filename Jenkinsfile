@@ -4,16 +4,16 @@ pipeline {
 
     stages {
  
-        stage('Init'){
+        stage('Docker check'){
             steps {
-                echo 'Init'
+                sh  'docker --version'
                 echo '******************************'
             }
         }
  
-        stage('Docker Build') {
+        stage('Docker compose check') {
             steps {
-                sh  'docker --version'
+                sh  'docker-compose --version'
                 echo '******************************'
             }
         }
