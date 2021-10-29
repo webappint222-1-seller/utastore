@@ -13,7 +13,7 @@ pipeline {
  
         stage('Docker Build') {
             steps {
-                sh  'docker run hello-world'
+                sh  'docker --version'
                 echo '******************************'
             }
         }
