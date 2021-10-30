@@ -23,6 +23,7 @@ pipeline {
             
             steps {
                 sh  'docker run --help'
+                sh  'docker-compose help'
                 echo '******************************'
             }
         }
