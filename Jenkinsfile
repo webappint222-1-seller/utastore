@@ -22,8 +22,7 @@ pipeline {
         stage('Docker compose build') {
             
             steps {
-                sh 'cd Project222'
-                sh  'docker-compose build'
+                sh  'docker-compose up -d'
                 echo '******************************'
             }
         }
