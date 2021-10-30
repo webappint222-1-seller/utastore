@@ -21,7 +21,11 @@ pipeline {
 
         stage('Docker compose build') {
             
-            step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartAllServices'], useCustomDockerComposeFile: true])
+            steps {
+                sh 'cd Project222'
+                sh  'docker-compose build'
+                echo '******************************'
+            }
         }
     }
 }
