@@ -22,7 +22,7 @@ pipeline {
         stage('Docker compose build') {
             
             steps {
-                sh  'docker ps'
+                sh  'sudo docker-compose build'
                 echo '******************************'
             }
         }
