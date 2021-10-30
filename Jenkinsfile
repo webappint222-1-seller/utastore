@@ -29,24 +29,7 @@ pipeline {
         stage('[Pre-Deploy]stop and remove old container'){
 
             steps {
-                def imageExists = sh(script: 'docker images -q frontend', returnStdout: true) == ""
-                    println imageExists
-
-                    if( !imageExists ){
-                           sh 'docker stop fontend'
-                           sh 'docker rm fontend'
-                    }else {
-                        echo 'Frontend clear '
-                    }
-                def imageExists = sh(script: 'docker images -q backend', returnStdout: true) == ""
-                    println imageExists
-
-                    if( !imageExists ){
-                           sh 'docker stop backend'
-                           sh 'docker rm backend'
-                    }else {
-                        echo 'Backend clear '
-                    }
+                sh 'docker-compose down'
                 echo '******************************'
                 }
             }
