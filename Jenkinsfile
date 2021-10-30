@@ -26,13 +26,6 @@ pipeline {
             }
         }
 
-        stage('[Pre-Deploy]stop and remove old container'){
-
-            steps {
-                sh 'docker-compose down'
-                echo '******************************'
-                }
-            }
         stage('[Deploy]Docker compose up'){
             steps{
                 sh 'docker-compose up -d'
