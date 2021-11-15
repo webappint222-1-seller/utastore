@@ -8,11 +8,11 @@ services:
     image: devops_backend
     ports:
       - "3006:3006"
-  fontend:
-    container_name: fontend
+  frontend:
+    container_name: frontend
     build:
-      context: ./FontEnd
-    image: devops_fontend
+      context: ./frontend
+    image: devops_frontend
     ports:
       - "80:80"
       - "443:443"

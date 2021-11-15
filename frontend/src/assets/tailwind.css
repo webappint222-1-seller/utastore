@@ -1,0 +1,59 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.home {
+    @apply bg-silver w-full h-full
+}
+
+.about {
+    @apply bg-silver w-full h-full
+}
+
+.team {
+    @apply bg-silver w-full h-full
+}
+
+.bill {
+    @apply bg-silver w-full h-full
+}
+
+.account {
+    @apply bg-silver w-full h-full
+}
+
+.notFound {
+    @apply bg-silver flex justify-center items-center text-4xl font-mono w-full h-full;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.mt-10 {
+    margin-top: 10rem;
+}
+
+.bg-white {
+    background: #fff;
+}
+
+.card {
+    height: 10rem;
+    width: 20rem;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+img {
+    @apply w-auto;
+}
+
+body {
+    background: #d8dddb;
+  }
+  
