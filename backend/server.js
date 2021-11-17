@@ -15,7 +15,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const corsOptions = {
-  origin: 'www.utastore.team',
+  origin: 'https://www.utastore.team',
   credentials: true,
 };
 
@@ -32,7 +32,7 @@ app.use(express.static('public'));
 app.use(cors());
 app.use(cors(corsOptions));
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', "www.utastore.team");
+  res.header('Access-Control-Allow-Origin', "https://www.utastore.team");
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   // res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -211,7 +211,7 @@ app.post('/login',  multerSigleUpload.single('image'), function (req, res) {
         if (result == true) {
           var token = jwt.sign({id:result1[0].user_id},'secrect',{ expiresIn: '1d' });
           console.log(token);
-          res.cookie('jwt' , token , {maxAge: 24 * 60 * 60 *1000, httpOnly: true} );
+          res.cookie('jwt' , token , {maxAge: 24 * 60 * 60 *1000, httpOnly: false} );
           res.status(200).json("pass");
         } else{
           res.status(401).json("email or password is wrong")
