@@ -14,10 +14,10 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// const corsOptions = {
-//   origin: '*',
-//   credentials: true,
-// };
+const corsOptions = {
+  origin: 'www.utastore.team',
+  credentials: true,
+};
 
 const options = {
   key: fs.readFileSync('etc/key.pem'),
@@ -30,11 +30,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(upload.array()); 
 app.use(express.static('public'));
 app.use(cors());
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Origin', "www.utastore.team");
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  // res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   // res.header('Access-Control-Allow-Credentials', true); 
   next();
