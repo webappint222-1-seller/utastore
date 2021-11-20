@@ -26,16 +26,19 @@ pipeline {
             }
         }
 
-        stage('[Pre-Deploy]stop and remove old container'){
+        stage('[Pre-Deploy]stop and remove old container && image'){
 
             steps {
                 sh 'sudo docker-compose down'
+                sh 'sudo docker image prune -a'
+                sh 'Y'
                 echo '******************************'
                 }
             }
         stage('[Deploy]Docker compose up'){
             steps{
                 sh 'sudo docker-compose up -d'
+                sh 'sudo docker ps -a'
                 echo '******************************'
             }
         }
