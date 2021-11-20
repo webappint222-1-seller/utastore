@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "forever start -c nodemon server.js"
+    "dev": "nodemon ./server.js localhost 3006"
   },
   "keywords": [
     "nodejs",
