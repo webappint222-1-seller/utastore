@@ -3,5 +3,5 @@ WORKDIR api/
 COPY package*.json ./
 RUN npm install && npm update
 COPY ./ .
-CMD ["node", "server.js"]
+CMD ["npm", "run", "dev"]
 EXPOSE 3006
