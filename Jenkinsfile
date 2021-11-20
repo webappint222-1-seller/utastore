@@ -31,6 +31,7 @@ pipeline {
             steps {
                 sh 'sudo docker-compose down'
                 sh 'sudo docker image prune -a'
+                echo 'Y'
                 echo '******************************'
                 }
             }
