@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 const whitelist ="https://www.utastore.team/";
 const corsOptions = {
   origin: (origin,callback,res)=> {
-    if(!origin || whitelist.indexOf(origin) !== -1){
+    if(whitelist.indexOf(origin) !== -1){
       callback(null, true)
     }else{
       callback(new Error("401"))
@@ -24,7 +24,7 @@ const corsOptions = {
   },
   credentials: true,
   optionsSuccessStatus: 200
-};
+}; 
 // const corsOptions = {
 //   origin: 'https://www.utastore.team',
 //   credentials: true,
