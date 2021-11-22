@@ -6,8 +6,7 @@ services:
     build: 
       context: ./backend
     image: devops_backend
-    ports:
-      - "3006:3006"
+
   frontend:
     container_name: frontend
     build:

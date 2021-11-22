@@ -41,6 +41,13 @@ pipeline {
                 echo '******************************'
             }
         }
+        stage('[After-Deploy]clear old  image'){
+
+            steps {
+                sh 'sudo docker image prune -a -f'
+                echo '******************************'
+                }
+            }
 
             
        
