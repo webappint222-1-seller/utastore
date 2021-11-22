@@ -13,11 +13,22 @@ const { signupValidation, loginValidation } = require("./app/models/validation.j
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const whitelist ="https://www.utastore.team/";
 const corsOptions = {
-  origin: 'https://www.utastore.team',
+  origin: (origin,callback,res)=> {
+    if(!origin || whitelist.indexOf(origin) !== -1){
+      callback(null, true)
+    }else{
+      callback(new Error("401"))
+    }
+  },
   credentials: true,
+  optionsSuccessStatus: 200
 };
+// const corsOptions = {
+//   origin: 'https://www.utastore.team',
+//   credentials: true,
+// };
 
 const options = {
   key: fs.readFileSync('etc/key.pem'),
