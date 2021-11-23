@@ -48,6 +48,8 @@ export default {
     },
 
     confirmRegis(infoRegister) {
+      this.reloadUser();
+      console.log(this.userList[0])
       // this.$refs.observer.validate()
       console.log(`email: ${infoRegister.emailaddress}`)
       this.$swal.fire({
@@ -65,7 +67,6 @@ export default {
           console.log(`userList: ${Array.isArray(this.userList)} ${this.userList}`)
           // console.log(`infoAccounts: ${this.infoAccounts[0].emailaddress}`)
           // console.log(`value: ${this.infoAccounts = this.infoAccounts.filter((info) => info.emailaddress == infoRegister.emailaddress)}`)
-          this.reloadUser()
           this.userList = this.userList.filter(
             (info) =>
               info.emailaddress == infoRegister.emailaddress
