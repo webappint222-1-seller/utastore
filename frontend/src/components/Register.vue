@@ -26,7 +26,7 @@
             <span class="text-red-500 bg-opacity-80 font-medium rounded-sm">{{ errors[0] }}</span>
           </validation-provider>
 
-          <validation-provider v-slot="{ errors }" name="Password" rules="required">
+          <validation-provider v-slot="{ errors }" name="Password" rules="required|min">
             <span class="flex shadow-md mt-5 mb-1 text-xs">
               <span
                 class="bg-lightpink w-24 font-bold text-center text-black p-3 px-3 rounded-l"
@@ -34,7 +34,7 @@
               <input
                 class="field text-sm text-black p-2 px-3 rounded-r w-full bg-white"
                 type="password"
-                placeholder
+                placeholder="8-12 Character"
                 id="password"
                 v-model="enteredPassword"
                 required
@@ -51,7 +51,7 @@
               <input
                 class="field text-sm text-black p-2 px-3 rounded-r w-full bg-white"
                 type="text"
-                placeholder="somchai "
+                placeholder="John"
                 id="name"
                 v-model="enteredName"
                 required
@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { required, max, max_value, numeric, email, alpha_spaces } from 'vee-validate/dist/rules'
+import { required, min, max, max_value, numeric, email, alpha_spaces } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 
 setInteractionMode('eager')
@@ -131,6 +131,11 @@ setInteractionMode('eager')
 extend('required', {
   ...required,
   message: '{_field_} can not be empty',
+})
+
+extend('min', {
+  ...min,
+  message: '{_field_} must be at least 8 characters',
 })
 
 extend('max', {

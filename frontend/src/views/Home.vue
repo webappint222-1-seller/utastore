@@ -1,124 +1,111 @@
 <template>
   <div class="home">
-    <Navbar @logout="logOutLocal" />
+    <!-- sent role to Navbar -->
+    <Navbar @logout="logOutLocal" :role="userRole" />
     <!-- <LoginPage @login-data="getEmail" hidden/> -->
+    <GoTop :size="60" :radius="4" weight="bold" :bottom="200" :right="60" :boundary="800" fg-color="#FFB6C1" bg-color="#343434" ></GoTop>
     <v-container class="flex">
-       <!-- ROLE:{{ this.userList.role }} -->
       <v-flex xs12 sm12 md12 lg12 class="justify-center">
-        
         <!-- <div v-show="this.userList.role == 1"> -->
-       
-        <!-- <div v-for="user in userList" :key="user.id">
-          USER:{{ user.name }}
-          <br />
-          ROLE:{{ user.role }}
-          <div v-if="user.role == 2">I am Buyer</div>
-          <div v-else>
-            I am Admin -->
-            <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-10">
-              <span>add / edit</span>
+        <!-- <div v-for="user in userList" :key="user.name"> -->
+        <!-- USER:{{ this.userList.name }}
+        <br />
+        -->      
+        <div v-if="userRole == 1">
+          <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-10">
+            <span>add / edit</span>
+          </v-btn>
+
+          <div v-show="addedit" class="justify-center">
+            <v-btn dark v-on:click="toggleDone()" class="mt-10 ml-28">
+              <span>cancel</span>
             </v-btn>
+            <v-card dark class="w-80 h-auto mt-10">
+              <v-card-text>
+                <validation-observer ref="observer" v-slot="{ invalid }">
+                  <form>
+                    <validation-provider v-slot="{ errors }" name="Product Name" rules="required">
+                      <v-text-field
+                        v-model.trim="nameForm"
+                        :error-messages="errors"
+                        label="Product Name"
+                        required
+                        single-line
+                      ></v-text-field>
+                    </validation-provider>
 
-            <div v-show="addedit" class="justify-center">
-              <v-btn dark v-on:click="toggleDone()" class="mt-10 ml-28">
-                <span>cancel</span>
-              </v-btn>
-              <v-card dark class="w-80 h-auto mt-10">
-                <v-card-text>
-                  <validation-observer ref="observer" v-slot="{ invalid }">
-                    <form>
-                      <validation-provider v-slot="{ errors }" name="Product Name" rules="required">
-                        <v-text-field
-                          v-model.trim="nameForm"
+                    <validation-provider v-slot="{ errors }" name="Band Name" rules="required">
+                      <v-text-field
+                        v-model.trim="bandForm"
+                        :error-messages="errors"
+                        label="Band Name"
+                        required
+                        single-line
+                      ></v-text-field>
+                    </validation-provider>
+
+                    <validation-provider v-slot="{ errors }" name="Price" rules="required|numeric">
+                      <v-text-field
+                        v-model.number="priceForm"
+                        :error-messages="errors"
+                        label="Price"
+                        required
+                        single-line
+                        type="number"
+                      ></v-text-field>
+                    </validation-provider>
+
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="Product Description"
+                      rules="required|max:200"
+                    >
+                      <v-textarea
+                        v-model="desForm"
+                        :error-messages="errors"
+                        :counter="200"
+                        label="Producr Description"
+                        required
+                        single-line
+                      ></v-textarea>
+                    </validation-provider>
+
+                    <validation-provider v-slot="{ errors }" name="Product Image" rules="required">
+                      <div class="grid grid-cols-4 ml-4">
+                        <v-icon>mdi-camera</v-icon>
+                        <input
                           :error-messages="errors"
-                          label="Product Name"
-                          required
-                          single-line
-                        ></v-text-field>
-                      </validation-provider>
+                          type="file"
+                          id="fileForm"
+                          accept="image/png, image/jpeg"
+                          ref="image"
+                          name="image"
+                          @change="uploadImage($event)"
+                          class="mt-4 h-8 w-40 rounded border-black border-2"
+                        />
+                      </div>
 
-                      <validation-provider v-slot="{ errors }" name="Band Name" rules="required">
-                        <v-text-field
-                          v-model.trim="bandForm"
-                          :error-messages="errors"
-                          label="Band Name"
-                          required
-                          single-line
-                        ></v-text-field>
-                      </validation-provider>
+                      <img :src="i" id="imgid" class="h-auto w-auto object-cover rounded my-4" />
+                    </validation-provider>
 
-                      <validation-provider
-                        v-slot="{ errors }"
-                        name="Price"
-                        rules="required|numeric"
-                      >
-                        <v-text-field
-                          v-model.number="priceForm"
-                          :error-messages="errors"
-                          label="Price"
-                          required
-                          single-line
-                          type="number"
-                        ></v-text-field>
-                      </validation-provider>
-
-                      <validation-provider
-                        v-slot="{ errors }"
-                        name="Product Description"
-                        rules="required|max:200"
-                      >
-                        <v-textarea
-                          v-model="desForm"
-                          :error-messages="errors"
-                          :counter="200"
-                          label="Producr Description"
-                          required
-                          single-line
-                        ></v-textarea>
-                      </validation-provider>
-
-                      <validation-provider
-                        v-slot="{ errors }"
-                        name="Product Image"
-                        rules="required"
-                      >
-                        <div class="grid grid-cols-4 ml-4">
-                          <v-icon>mdi-camera</v-icon>
-                          <input
-                            :error-messages="errors"
-                            type="file"
-                            id="fileForm"
-                            accept="image/png, image/jpeg"
-                            ref="image"
-                            name="image"
-                            @change="uploadImage($event)"
-                            class="mt-4 h-8 w-40 rounded border-black border-2"
-                          />
-                        </div>
-
-                        <img :src="i" id="imgid" class="h-auto w-auto object-cover rounded my-4" />
-                        
-                      </validation-provider>
-
-                      <v-btn
-                        class="mr-4"
-                        @click="submitProductForm"
-                        type="submit"
-                        :disabled="invalid"
-                      >Submit</v-btn>
-                      <v-btn @click="clear">Clear</v-btn>
-                    </form>
-                  </validation-observer>
-                </v-card-text>
-              </v-card>
-            <!-- </div> -->
-          <!-- </div> -->
-        </div>
+                    <v-btn
+                      class="mr-4"
+                      @click="submitProductForm"
+                      type="submit"
+                      :disabled="invalid"
+                    >Submit</v-btn>
+                    <v-btn @click="clear">Clear</v-btn>
+                  </form>
+                </validation-observer>
+              </v-card-text>
+            </v-card>
+          </div>
+        </div>      
       </v-flex>
     </v-container>
     <!-- ----------------------------------------------------------------------------------------------------------- -->
     <!-- Dummy -->
-    <v-container class="flex mb-40">
+    <!-- <v-container class="flex mb-40">
       <v-layout row wrap>
         <v-flex xs12 sm6 md6 lg3 wrap v-for="p in products" :key="p.title" class="justify-center">
           <v-card dark flat class="pa-2 w-44 h-auto my-10">
@@ -142,13 +129,13 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
+    </v-container>-->
 
     <!---------------------------------------------------------------------------------------------------------------->
 
     <v-container class="flex mb-40">
       <v-layout row wrap>
-        <v-flex xs12 sm5 md6 lg3 wrap v-for="uta in productInfo" :key="uta.id" justify-center>
+        <v-flex xs12 sm6 md6 lg4 wrap v-for="uta in productInfo" :key="uta.id" justify-center>
           <v-card dark flat class="pa-2 w-52 h-auto my-10">
             <v-responsive class>
               <img :src="`${url}/upload/${uta.image}`" class="w-52 h-auto" />
@@ -163,13 +150,17 @@
               </ul>
             </v-card-text>
 
-            <div class>
+            
+
+            <div v-if="userRole == 2">
               <v-card-actions class="justify-center">
                 <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
-
+            </div>
+          
+            <div v-else-if="userRole == 1">
               <v-card-actions class="justify-center">
                 <v-btn @click="showProduct(uta)" color="yellow darken-4" small>
                   <v-icon small>edit</v-icon>
@@ -179,35 +170,40 @@
                 </v-btn>
               </v-card-actions>
             </div>
+
+            <div v-else>
+              <v-card-actions class="justify-center">              
+                <v-btn disabled color="#FFB6C1" small>
+                  <v-icon small>shopping_cart</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </div>
+           
           </v-card>
         </v-flex>
       </v-layout>
 
+      <div v-if="userRole == 2">
       <v-layout column wrap mt-8>
-        <v-flex xs12 sm12 md12 lg12 wrap class="justify-center hidden-xs-only">
-          <v-card flat class="pa-4 overflow-y-scroll" color="black" width="500" height="520">
-            <span class="text-lg white--text">CART</span>
+        <v-flex cols xs12 sm12 md12 lg12 wrap class="justify-center hidden-xs-only">
+          <v-responsive>
+          <v-card flat class="ml-10 pa-4 overflow-y-scroll lg:w-80 w-60" color="black"  height="520">
+            <span class="text-lg font-bold white--text">CART</span>
 
             <div v-for="cInfo in cartInfo" :key="cInfo.id">
               <v-card dark flat class="w-auto h-auto my-4 py-4" color="#C0C0C0">
                 <v-layout wrap>
                   <v-row class="justify-center">
-                    <v-card-text class="text-sm w-40 overflow-ellipsis black--text">
-                      <span>{{ cInfo.name }}</span>
+                    <v-card-text class="text-sm w-40  black--text">
+                      <span class= "font-medium">{{ cInfo.product_name }}</span>
                     </v-card-text>
                     <v-card-text class="text-sm w-40 black--text">
-                      <ul class>
-                        <li>
-                          <span class>Quantity:</span>
-                        </li>
-                        <li class>
-                          <span class>{{ cInfo.quantity }}</span>
-                        </li>
-                      </ul>
+                      <span class>Quantity: {{ cInfo.order_quantity }}</span>
+                      
                     </v-card-text>
 
-                    <v-card-actions class>
-                      <v-btn @click="deleteCart(cInfo.id)" color="red darken-4">
+                    <v-card-actions class="">
+                      <v-btn @click="deleteCart(cInfo.order_id)" color="red darken-4">
                         <v-icon>delete</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -233,8 +229,10 @@
               </v-tooltip>
             </v-layout>
           </v-card>
+          </v-responsive>
         </v-flex>
       </v-layout>
+      </div>
     </v-container>
     <Footer></Footer>
   </div>
@@ -251,6 +249,7 @@ import Footer from '@/components/Footer.vue'
 // import LoginPage from '@/views/LoginPage.vue'
 import { required, max, max_value, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import GoTop from '@inotom/vue-go-top';
 // import VueNumericInput from 'vue-numeric-input'
 // import axios from 'axios';
 // import mounted from 'vue';
@@ -280,7 +279,12 @@ extend('numeric', {
 export default {
   name: 'Home',
   props: [''],
-
+  //Read First and data by param
+  mounted() {
+    if (this.$route.params.data == null) { return }
+    this.userData = this.$route.params.data
+    this.userRole = this.$route.params.data.role    
+  },
   data() {
     return {
       products: [
@@ -303,7 +307,8 @@ export default {
       addCart: '',
       cartInfo: [],
       productInfo: [],
-      userList: [],
+      userData: null,
+      userRole: null,
       inEditMode: false,
       addCartMode: false,
       editId: '',
@@ -315,8 +320,8 @@ export default {
       i: 'https://files.catbox.moe/vq3v5e.png',
       // url: 'http://localhost:5001/productInfo',
       carturl: 'http://localhost:5002/cartInfo',
-      url: 'https://www.utastore.team:3006',
-      // url: 'http://localhost:3006',
+      // url: 'https://www.utastore.team:3006',
+      url: 'https://utastore:3006',
     }
 
   },
@@ -324,6 +329,7 @@ export default {
   components: {
     Navbar,
     Footer,
+    GoTop,
     // LoginPage,
     ValidationProvider,
     ValidationObserver,
@@ -331,10 +337,7 @@ export default {
 
   },
 
-  computed: {
-    // product() {
-    //   return this.url + "/products"
-    // }
+  computed: {    
 
   },
 
@@ -348,7 +351,7 @@ export default {
     //   infoEmail.emailaddress = this.defaEmail
     // },
     logOutLocal() {
-      this.userList = ''
+      this.userData = null
     },
 
     toggleDone() {
@@ -462,6 +465,7 @@ export default {
       try {
         const res = await fetch(this.url + "/formdataupload", {
           method: 'POST',
+          credentials: 'include',
           // headers: {
           //   'content-type': 'application/json'
           // },
@@ -493,109 +497,83 @@ export default {
         Toast.fire({
           icon: 'success',
           title: 'Add new product successfully'
-        })
-        // this.$router.push('/');
-        // location.reload()
-        // this.productInfo = await this.getProductForm()
+        })        
         this.reloadProduct()
       }
       catch (error) { console.log(`save failed: ${error}`) }
     },
 
-
-    // dummyProductInCart(utaInfo) {
-    //   this.editId = utaInfo.id
-    //   this.nameForm = utaInfo.name
-    //   this.bandForm = utaInfo.band
-    //   this.priceForm = utaInfo.price
-    //   this.desForm = utaInfo.des
-    //   this.addDummyToCart({
-    //     id: this.id,
-    //     name: this.title,
-    //     band: this.band,
-    //     price: this.price,
-    //     des: this.des
-    //   })
-    // },
-
-    // async addDummyToCart(newDummyCartForm) {
-    //   try {
-    //     const res = await fetch(this.carturl, {
-    //       method: 'POST',
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       },
-    //       body: JSON.stringify({
-    //         id: newDummyCartForm.id,
-    //         name: newDummyCartForm.name,
-    //         band: newDummyCartForm.band,
-    //         price: newDummyCartForm.price,
-    //         des: newDummyCartForm.des
-    //       })
-    //     })
-    //     const data = await res.json()
-    //     this.cartInfo = [...this.cartInfo, data]
-    //   }
-    //   catch (error) { console.log(`add dummy failed: ${error}`) }
-    // },
-
-    productInCart(utaInfo) {
-      this.editId = utaInfo.id
-      this.nameForm = utaInfo.name
-      this.bandForm = utaInfo.band
+    productInCart(utaInfo) {     
       this.priceForm = utaInfo.price
-      this.desForm = utaInfo.des
+      this.product_id = utaInfo.product_id
+      this.nameForm = utaInfo.product_name
 
-
-      this.addNewProductToCart({
-        id: this.editid,
-        name: this.nameForm,
-        band: this.bandForm,
-        price: this.priceForm,
-        des: this.desForm,
-        totalprice: this.priceForm,
-        quantity: this.defaultQuantity,
-        userEmail: this.defaultEmail
+    // console.log(`cartPrice: ${typeof this.priceForm} ${this.priceForm}`)
+    // console.log(`cartQuantity: ${typeof utaInfo.quantity} ${utaInfo.quantity}`)
+      this.addNewProductToCart({        
+        order_price: this.priceForm,
+        order_quantity: this.defaultQuantity,
+        product_id: this.product_id,
+        product_name: this.nameForm,
+        // userEmail: this.defaultEmail
       })
     },
 
-    async addNewProductToCart(newProductToCart) {
+    async addNewProductToCart() {
+
+      const formData = new FormData()      
+      formData.append('order_price', this.priceForm)
+      formData.append('order_quantity', this.defaultQuantity)
+      formData.append('product_id', this.product_id)
+      formData.append('product_name', this.nameForm)    
+       console.log(`----`)
+      console.log(`priceincart: ${this.priceForm}`)
+      console.log(`quantityincart: ${this.defaultQuantity}`)
+      console.log(`productId: ${this.product_id}`)
+      
+
       for (let i = 0; i < this.cartInfo.length; i++) {
-        if (this.cartInfo[i].name == newProductToCart.name) {
+        if (this.cartInfo[i].product_name == this.nameForm) {
+          console.log(`productName2: ${this.nameForm}`)
           return this.editQuantity(this.cartInfo[i])
         }
       }
       try {
-        const res = await fetch(this.carturl, {
+          await fetch(this.url + "/checkout", {
           method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            id: newProductToCart.id,
-            name: newProductToCart.name,
-            band: newProductToCart.band,
-            price: newProductToCart.price,
-            des: newProductToCart.des,
-            totalprice: newProductToCart.totalprice,
-            quantity: newProductToCart.quantity,
-            userEmail: newProductToCart.defaultEmail
+          credentials: 'include',
+          // headers: {
+          //   'content-type': 'application/json'
+          // },
+          // body: JSON.stringify({
+          //   id: newProductToCart.id,
+          //   name: newProductToCart.name,
+          //   band: newProductToCart.band,
+          //   price: newProductToCart.price,
+          //   des: newProductToCart.des,
+          //   totalprice: newProductToCart.totalprice,
+          //   quantity: newProductToCart.quantity,
+            // userEmail: newProductToCart.defaultEmail
+            
 
-          })
+          // })
+          body: formData
         })
-        const data = await res.json()
-        console.log(`${data.id}`)
+        console.log(`productName: ${this.nameForm}`)
+        this.cartInfo = await this.getCartForm()
+        // const data = await res.json()
+        // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
         // this.editQuantity(newProductToCart)
         // res.fetchclose()
 
-        this.cartInfo = [...this.cartInfo, data]
+        // this.cartInfo = [...this.cartInfo, data]
 
         const Toast = this.$swal.mixin({
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1000,
           timerProgressBar: true,
           didOpen: (toast) => {
             toast.addEventListener('mouseenter', this.$swal.stopTimer)
@@ -608,30 +586,40 @@ export default {
           title: 'Add to cart successfully'
         })
       }
-      catch (error) { console.log(`add to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
+      catch (error) { console.log(`add to cart failed: ${error}`) }
 
 
     },
-    async editQuantity(newQuantity) {
+    async editQuantity() {
+      const formData = new FormData()      
+      formData.append('order_price', this.priceForm)
+      formData.append('order_quantity', this.defaultQuantity)
+      formData.append('order_id', this.cartInfo.order_id)
+
+      console.log(`orderId: ${this.cartInfo.order_id}`)
+
       newQuantity.quantity++
       try {
-        const res = await fetch(`${this.carturl}/${newQuantity.id}`, {
+        const res = await fetch(`${this.url}/checkoutedit/${this.order_id}`, {
           method: 'PUT',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            id: newQuantity.id,
-            name: newQuantity.name,
-            band: newQuantity.band,
-            price: newQuantity.price,
-            des: newQuantity.des,
-            quantity: newQuantity.quantity,
-            totalprice: newQuantity.price * newQuantity.quantity
-          })
+        
+          
+          // headers: {
+          //   'content-type': 'application/json'
+          // },
+          // body: JSON.stringify({
+          //   id: newQuantity.id,
+          //   name: newQuantity.name,
+          //   band: newQuantity.band,
+          //   price: newQuantity.price,
+          //   des: newQuantity.des,
+          //   quantity: newQuantity.quantity,
+          //   totalprice: newQuantity.price * newQuantity.quantity
+          // })
+          body: formData
         })
         const data = await res.json()
-        this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === newQuantity.id ?
+        this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === this.order_id ?
           {
             ...cInfo,
 
@@ -660,54 +648,49 @@ export default {
       catch (error) { console.log(`get product failed: ${error}`) }
     },
 
-    // async getCartForm() {
-    //   try {
-    //     const res = await fetch(this.carturl)
-    //     const getcartdata = await res.json()
-    //     return getcartdata
+    async getCartForm() {
+      try {
+        const res = await fetch(this.url + "/getcheckoutbyid", {
+          credentials: 'include'
+        })
+        const getcartdata = await res.json()
+        
+        // console.log(`cartdata: ${typeof getcartdata} ${getcartdata.quantity}`)
+        return getcartdata
+        
 
-    //   }
-    //   catch (error) { console.log(`get cart failed: ${error}`) }
-    // },
+      }
+      catch (error) { console.log(`get cart failed: ${error}`) }
+    },
 
+    //only check have cookie?
     async getUser() {
+      if (document.cookie == null) { return }
       try {
         const res = await fetch(this.url + "/getuser", {
-
-          // headers: {
-          //   'content-type': 'application/json'
-          // },
           credentials: 'include'
         })
         const getuserdata = await res.json()
+        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.name}`)
+
         return getuserdata
       }
       catch (error) {
         console.log(`get user failed: ${error}`)
 
       }
-      console.log(`user: ${this.userList[1]}`)
 
-      for (let i = 0; i < this.userList.length; i++) {
-        console.log(`user: ${this.userList[i]}`)
-      }
+
+      // console.log(`user: ${this.productInfo[0]}`)
+
     },
-
-
-
-
-    // filterUser() {
-    // this.cartInfo = this.cartInfo.filter(
-    // (info) => 
-    // info.emailaddress == this.defaultEmail
-    // )
-    // },
-
+  
     // DELETE
     async deleteProduct(deleteId) {
       try {
         await fetch(`${this.url}/products/${deleteId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          credentials: 'include'
         })
         // this.productInfo = this.productInfo.filter(uta => uta.id !== deleteId)
         this.reloadProduct()
@@ -719,11 +702,13 @@ export default {
 
     async deleteCart(deleteCartId) {
       try {
-        await fetch(`${this.carturl}/${deleteCartId}`, {
-          method: 'DELETE'
+        await fetch(`${this.url}/checkoutdelete/${deleteCartId}`, {
+          method: 'DELETE',
+          
         })
-        this.cartInfo = this.cartInfo.filter(cInfo => cInfo.id !== deleteCartId)
-        this.reloadCart()
+        
+        // this.cartInfo = this.cartInfo.filter(cInfo => cInfo.id !== deleteCartId)
+        this.cartInfo = await this.getCartForm()
       }
       catch (error) {
         console.log(`delete cart failed: ${error}`)
@@ -793,6 +778,7 @@ export default {
         console.log(`id2: ${this.editId}`)
         await fetch(`${this.url}/productupdate/${this.editId}`, {
           method: 'PUT',
+          credentials: 'include',
           // headers: {
           //   'content-type': 'application/json'
           // },
@@ -859,9 +845,13 @@ export default {
 
   // GET-2
   async created() {
-    this.productInfo = await this.getProductForm()
-    // this.cartInfo = await this.getCartForm()
-    this.userList = await this.getUser();
+    this.productInfo = await this.getProductForm()       
+    this.userData = await this.getUser();
+    this.userRole = this.userData.data.role
+    this.cartInfo = await this.getCartForm(); 
+
+    //  console.log(`type: ${this.userData.data}`)
   }
+
 }
 </script>

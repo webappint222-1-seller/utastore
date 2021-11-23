@@ -13,7 +13,7 @@
                   <v-card-text class="text-sm black--text">
                     <ul class>
                       <li>
-                        <span>Order Name: {{ cInfo.name }} By. {{ cInfo.band }}</span>
+                        <span>Order Name: {{ cInfo.product_name }} By. {{ cInfo.band }}</span>
                       </li>
                       <li>
                         <span>Order Price: {{ cInfo.price }} yen</span>
@@ -22,7 +22,7 @@
                         <span>Total Order Price: {{ cInfo.totalprice }} yen</span>
                       </li>
                       <li>
-                        <span>Quantity: {{ cInfo.quantity }}</span>
+                        <span>Quantity: {{ cInfo.order_quantity }}</span>
                       </li>
                     </ul>
                   </v-card-text>
@@ -45,7 +45,7 @@
                     </template>
                   </li>
                   <li>
-                    <v-btn @click="deleteCart(cInfo.id)" color="red darken-4" class="ml-24 mb-2">
+                    <v-btn @click="deleteCart(cInfo.order_id)" color="red darken-4" class="ml-24 mb-2">
                       <v-icon>delete</v-icon>
                     </v-btn>
                   </li>
@@ -98,7 +98,8 @@ export default {
       cartInfo: [],
       totalQuantity: 0,
       totalPrice: 0,
-      url: 'http://localhost:5001/productInfo',
+      // url: 'http://localhost:5001/productInfo',
+      url: 'https://utastore:3006',
       carturl: 'http://localhost:5002/cartInfo',
       click: false,
       value: 1
@@ -114,28 +115,44 @@ export default {
 
   },
   methods: {
+    // async getCartForm() {
+    //   try {
+    //     const res = await fetch(this.carturl)
+    //     const getcartdata = await res.json()
+    //     return getcartdata
+
+    //   }
+    //   catch (error) { console.log(`get summary failed: ${error}`) }
+    // },
+
     async getCartForm() {
       try {
-        const res = await fetch(this.carturl)
+        const res = await fetch(this.url + "/getcheckoutbyid", {
+          credentials: 'include'
+        })
         const getcartdata = await res.json()
+        
+        // console.log(`cartdata: ${typeof getcartdata} ${getcartdata.quantity}`)
         return getcartdata
+        
 
       }
-      catch (error) { console.log(`get summary failed: ${error}`) }
+      catch (error) { console.log(`get cart failed: ${error}`) }
     },
 
     async deleteCart(deleteCartId) {
       try {
-        await fetch(`${this.carturl}/${deleteCartId}`, {
-          method: 'DELETE'
+        await fetch(`${this.url}/checkoutdelete/${deleteCartId}`, {
+          method: 'DELETE',
+          
         })
+        this.cartInfo = await this.getCartForm()
         this.cartInfo = this.cartInfo.filter(cInfo => cInfo.id !== deleteCartId)
-
+        
       }
       catch (error) {
         console.log(`delete cart failed: ${error}`)
       }
-
     },
 
     async deleteAfterCart() {

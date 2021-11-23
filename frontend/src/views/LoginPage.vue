@@ -20,8 +20,8 @@ export default {
   data() {
     return {
       // url: " http://localhost:5000/infoAccounts",
-      url: 'https://www.utastore.team:3006',
-      userList: [],
+      url: 'https://utastore:3006',
+      currentUser: null,
     };
   },
   components: {
@@ -145,18 +145,28 @@ export default {
 
     // },
 
-    // async getUser() {
-    //   try {
-    //     const res = await fetch(this.url + "/customers")
-    //     const resuserdata = await res.json()
-    //     return resuserdata
-    //   }
-    //   catch (error) {
-    //     console.log(`getuser False!!! ${error}`)
-    //     console.log(`userList: ${Array.isArray(this.userList)} ${this.userList}`)
-    //   }
+     async getUser() {
+      try {
+        // console.log(`user: ${typeof this.currentUser}`)
+        const res = await fetch(this.url + "/getuser", {
 
-    // },
+          
+          credentials: 'include'
+        })
+        const getuserdata = await res.json()
+        return getuserdata
+      }
+      catch (error) {
+        console.log(`get user failed: ${error}`)
+
+      }
+      // console.log(`user: ${this.productInfo[0]}`)
+
+      // for (let i = 0; i < this.userList.length; i++) {
+      //   console.log(`user: ${this.userList[i]}`)
+      // }
+    },
+
 
 
     async login(emailPasword) {
@@ -181,15 +191,14 @@ export default {
 
         })      
 
-        // this.$cookie.set('token', res.data.token);
-        // const data = await res.json()
-        // this.productInfo = [...this.productInfo, data]
+        
+        const res = await this.getUser()        
 
         const Toast = this.$swal.mixin({
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1000,
           timerProgressBar: true,
           didOpen: (toast) => {
             toast.addEventListener('mouseenter', this.$swal.stopTimer)
@@ -201,7 +210,9 @@ export default {
           icon: 'success',
           title: 'Login is successfully'
         })
-        this.$router.push('/');        
+        //to Home by param
+        this.$router.push({path:'/', params: {data:res}});
+        this.$router.params        
 
       }
       catch (error) { console.log(`login: ${error}`) }
@@ -214,7 +225,7 @@ export default {
   },
   async created() {
     this.infoAccounts = await this.fetchEmailPassword();
-    // this.userList = await this.getUser();
+    this.currentUse = await this.getUser();
   },
 };
 </script>

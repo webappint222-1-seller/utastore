@@ -1,21 +1,11 @@
 <template>
   <div class="account">
-    <Navbar />
+    <Navbar @logout="logOutLocal" :role="userRole" />
     <v-container class="flex justify-center w-auto h-auto">
       <v-flex xs10 sm10 md8 lg9 class="pa-2 justify-center">
-        <!-- <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-10">
-          <span>add / edit</span>
-        </v-btn>-->
-
-        <!-- <div v-show="addedit" class="justify-center"> -->
-        <!-- <v-btn dark v-on:click="toggleDone()" class="mt-10 ml-28">
-            <span>cancel</span>
-        </v-btn>-->
-
-        <!-- </div> -->
-
+      
         <!-- ----------------------------------------------------------------------------------------------------------- -->
-        <!-- Dummy -->
+        
         <v-container class="flex mb-40">
           <v-layout row warp>
             <v-row class="justify-center">
@@ -157,89 +147,6 @@
       </v-flex>
     </v-container>
     <!---------------------------------------------------------------------------------------------------------------->
-
-    <!-- <v-container class="flex mb-40">
-      <v-layout row wrap>
-        <v-flex xs12 sm6 md6 lg3 wrap v-for="uta in productInfo" :key="uta.id" justify-center>
-          <v-card dark flat class="pa-2 w-44 h-auto my-10">
-            <v-responsive>
-              <img :src="uta.file" class="w-40 h-40" />
-            </v-responsive>
-            <v-card-text class="justify-center text-xs break-words white--text">
-              <ul>
-                <li>{{ uta.name }}</li>
-                <li class="pt-2">{{ uta.band }}</li>
-                <li class="pt-2">{{ uta.price }} yen</li>
-                <li class="pt-2">{{ uta.des }}</li>
-              </ul>
-            </v-card-text>
-
-            <v-card-actions class="justify-center">
-              
-
-              <v-btn
-                @click.prevent="productInCart(uta)"
-                
-                color="#FFB6C1"
-                small
-              >
-               
-                <v-icon small>shopping_cart</v-icon>
-              </v-btn>
-            </v-card-actions>
-
-            <v-card-actions class="justify-center">
-              <v-btn @click="showProduct(uta)" color="yellow darken-4" small>
-                <v-icon small>edit</v-icon>
-              </v-btn>
-              <v-btn @click="deleteProduct(uta.id)" color="red darken-4" small>
-                <v-icon small>delete</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-
-      <v-layout column wrap mt-8>
-        <v-flex xs12 sm12 md12 lg12 wrap class="justify-center hidden-xs-only">
-          <v-card flat class="pa-4 overflow-y-scroll" color="black" width="300" height="520">
-            <span class="text-lg white--text">CART</span>
-
-            <div v-for="cInfo in cartInfo" :key="cInfo.id">
-              <v-card dark flat class="w-auto h-auto my-5" color="#C0C0C0">
-                <v-layout wrap>
-                  <v-card-text class="justify-start text-sm w-40 truncate white--text">
-                    <span>{{ cInfo.name }}</span>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn @click="deleteCart(cInfo.id)" color="red darken-4">
-                      <v-icon>delete</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-layout>
-              </v-card>
-            </div>
-
-            <v-layout class="justify-center mt-4">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    @click="$router.push('/billpage')"
-                    v-bind="attrs"
-                    v-on="on"
-                    color="#FFB6C1"
-                    dark
-                  >
-                    <v-icon>shopping_basket</v-icon>
-                  </v-btn>
-                </template>
-                <span>Check Out</span>
-              </v-tooltip>
-            </v-layout>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>-->
     <Footer></Footer>
   </div>
 </template>
@@ -252,7 +159,6 @@ import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import { required, max, max_value, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
-// import VueNumericInput from 'vue-numeric-input'
 
 setInteractionMode('eager')
 
@@ -278,7 +184,11 @@ extend('numeric', {
 
 export default {
   name: 'acPage',
-  //   props: [''],
+  mounted() {
+    
+    this.userRole = this.role
+  },
+  props: {role: null},
   data() {
     return {
       addedit: false,
@@ -296,6 +206,7 @@ export default {
       cartInfo: [],
       productInfo: [],
       infoAccounts: [],
+      userData: null,
       inEditMode: false,
       addCartMode: false,
       editId: '',
@@ -309,7 +220,6 @@ export default {
       // accounturl: 'http://localhost:5000/infoAccounts',
       // url: 'https://www.utastore.team:3006',
       url: 'http://localhost:3006',
-      userList: [],
 
     }
 
@@ -319,26 +229,13 @@ export default {
     Navbar,
     Footer,
     ValidationProvider,
-    ValidationObserver,
-    // VueNumericInput,
-
-  },
-
-  computed: {
-
+    ValidationObserver,  
   },
 
   methods: {
-
-
-    // disabled() {
-    //   this.productInfo.name === this.cartInfo.name
-    //   this.disabledbtn = true;
-    // },
-
-    // toggleDone() {
-    //   this.addedit = !this.addedit
-    // },
+    logOutLocal() {
+      this.userData = null
+    },
 
     clear() {
       this.$refs.observer.reset()
@@ -351,19 +248,7 @@ export default {
 
     },
 
-    // uploadImage(p) {
-    //   const varFile = p.target.files[0]
-    //   //console.log(this.fileForm)
-    //   if (varFile.type.includes('image')) {
-    //     const readImage = new FileReader()
-    //     readImage.onload = (e) => {
-    //       this.i = e.target.result
-    //     }
-    //     this.fileForm = varFile
-    //     readImage.readAsDataURL(varFile)
-    //   }
-    // },
-
+    
     submitAccountForm() {
       this.$refs.observer.validate()
 
@@ -379,13 +264,7 @@ export default {
         this.editPhoneForm !== '' &&
         this.editDateForm !== '' &&
         this.editAddressForm !== '') {
-        // this.productInfo.push({
-        //   name: this.nameForm,
-        //   band: this.bandForm,
-        //   price: this.priceForm,
-        //   des: this.desForm
-
-        // })
+      
         // EDIT-2
         if (this.inEditMode) {
           this.editAccount({
@@ -446,99 +325,7 @@ export default {
       catch (error) { console.log(`save failed: ${error}`) }
     },
 
-    // productInCart(accountInfo) {
-    //   this.editId = accountInfo.id
-    //   this.nameForm = accountInfo.name
-    //   this.bandForm = accountInfo.band
-    //   this.priceForm = accountInfo.price
-    //   this.desForm = accountInfo.des
-
-
-    //   this.addNewProductToCart({
-    //     id: this.editid,
-    //     name: this.nameForm,
-    //     band: this.bandForm,
-    //     price: this.priceForm,
-    //     des: this.desForm,
-    //     totalPrice: this.priceForm,
-    //     quantity: this.defaultQuantity
-
-    //   })
-    // },
-
-    // async addNewProductToCart(newProductToCart) {
-    //   for (let i = 0; i < this.cartInfo.length; i++) {
-    //     if (this.cartInfo[i].name == newProductToCart.name) {
-    //       return this.editQuantity(this.cartInfo[i])
-    //     }
-    //   }
-    //   try {
-    //     const res = await fetch(this.carturl, {
-    //       method: 'POST',
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       },
-    //       body: JSON.stringify({
-    //         id: newProductToCart.id,
-    //         name: newProductToCart.name,
-    //         band: newProductToCart.band,
-    //         price: newProductToCart.price,
-    //         des: newProductToCart.des,
-    //         totalPrice: newProductToCart.totalPrice,
-    //         quantity: newProductToCart.quantity
-
-    //       })
-    //     })
-    //     const data = await res.json()
-    //     console.log(`${data.id}`)
-    //     // this.disabledbtn = true;
-    //     // this.editQuantity(newProductToCart)
-    //     // res.fetchclose()
-
-    //     this.cartInfo = [...this.cartInfo, data]
-    //   }
-    //   catch (error) { console.log(`add to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
-
-    //   //***
-    // },
-    // async editQuantity(newQuantity) {
-    //   newQuantity.quantity++
-    //   try {
-    //     const res = await fetch(`${this.carturl}/${newQuantity.id}`, {
-    //       method: 'PUT',
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       },
-    //       body: JSON.stringify({
-    //         id: newQuantity.id,
-    //         name: newQuantity.name,
-    //         band: newQuantity.band,
-    //         price: newQuantity.price,
-    //         des: newQuantity.des,
-    //         quantity: newQuantity.quantity
-    //       })
-    //     })
-    //     const data = await res.json()
-    //     this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === newQuantity.id ?
-    //       {
-    //         ...cInfo,
-
-    //         name: data.name,
-    //         band: data.band,
-    //         price: data.price,
-    //         des: data.des,
-    //         quantity: data.quantity
-    //       } : cInfo
-    //     )
-    //   }
-    //   catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
-
-    // },
-
-
-
     // GET
-
     async getAccount() {
       try {
         const res = await fetch(this.url + "/customers")
@@ -547,6 +334,24 @@ export default {
 
       }
       catch (error) { console.log(`get account failed: ${error}`) }
+    },
+
+    async getUser() {
+      if (document.cookie == null) { return }
+      try {
+        const res = await fetch(this.url + "/getuser", {
+          credentials: 'include'
+        })
+        const getuserdata = await res.json()
+        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.role}`)
+
+        return getuserdata
+      }
+      catch (error) {
+        console.log(`get user failed: ${error}`)
+
+      }
+      // console.log(`user: ${this.productInfo[0]}`)
     },
 
     // DELETE
@@ -629,11 +434,9 @@ export default {
     // this.productInfo = await this.getProductForm()
     // this.cartInfo = await this.getCartForm()
     this.infoAccounts = await this.getAccount()
+    this.userData = await this.getUser();
 
   }
 
 }
-// const d = new Date(this.a.DOB);
-//     let text = d.toString();
-//      console.log(`text: ${text}`)
 </script>
