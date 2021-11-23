@@ -154,7 +154,7 @@
 
             <div v-if="userRole == 2">
               <v-card-actions class="justify-center">
-                <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small>
+                <v-btn @click.prevent="productInCart(uta),reloadCart()" color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
