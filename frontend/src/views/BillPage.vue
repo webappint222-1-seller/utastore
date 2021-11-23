@@ -171,25 +171,35 @@ export default {
     },
 
 
-    async editQuantityInCart(newCartQuantity) {
+    async editQuantity(product) {
+      const formData = new FormData()      
+      formData.append('order_price', product.order_price)
+      formData.append('order_quantity', product.order_quantity)
+      formData.append('order_id', product.order_id)
+
+      console.log(`orderId: ${product.order_id}`)
+
       try {
-        const res = await fetch(`${this.carturl}/${newCartQuantity.id}`, {
+        const res = await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
           method: 'PUT',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            id: newCartQuantity.id,
-            name: newCartQuantity.name,
-            band: newCartQuantity.band,
-            price: newCartQuantity.price,
-            des: newCartQuantity.des,
-            quantity: newCartQuantity.quantity,
-            totalprice: newCartQuantity.price * newCartQuantity.quantity
-          })
+        
+          
+          // headers: {
+          //   'content-type': 'application/json'
+          // },
+          // body: JSON.stringify({
+          //   id: newQuantity.id,
+          //   name: newQuantity.name,
+          //   band: newQuantity.band,
+          //   price: newQuantity.price,
+          //   des: newQuantity.des,
+          //   quantity: newQuantity.quantity,
+          //   totalprice: newQuantity.price * newQuantity.quantity
+          // })
+          body: formData
         })
         const data = await res.json()
-        this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === newCartQuantity.id ?
+        this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === this.order_id ?
           {
             ...cInfo,
 
