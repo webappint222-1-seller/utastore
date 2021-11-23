@@ -592,9 +592,11 @@ export default {
     },
     async editQuantity(product) {
       product.order_quantity ++
+      product.total_price_product_id = product.order_price * product.order_quantity
       const formData = new FormData()      
       formData.append('order_price', product.order_price)
       formData.append('order_quantity', product.order_quantity)
+      formData.append('total_price_product_id', product.total_price_product_id)
       formData.append('order_id', product.order_id)
 
       console.log(`orderId: ${product.order_id}`)
