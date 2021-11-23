@@ -94,7 +94,7 @@ import VueNumericInput from 'vue-numeric-input'
 export default {
   name: 'Bill',
   mounted() {
-    this.userData = await this.getUser();
+    this.userData = this.getUser();
     this.userRole = this.userData.data.role  
   },
   data() {
