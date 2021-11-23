@@ -65,7 +65,7 @@ export default {
           console.log(`userList: ${Array.isArray(this.userList)} ${this.userList}`)
           // console.log(`infoAccounts: ${this.infoAccounts[0].emailaddress}`)
           // console.log(`value: ${this.infoAccounts = this.infoAccounts.filter((info) => info.emailaddress == infoRegister.emailaddress)}`)
-          console.log(this.userList[0])
+          this.reloadUser()
           this.userList = this.userList.filter(
             (info) =>
               info.emailaddress == infoRegister.emailaddress
@@ -168,8 +168,9 @@ export default {
       // console.log(`user: ${this.productInfo[0]}`)
 
     },
-
-    
+    async reloadUser(){
+        this.userList = await this.getAllUser()
+    }
 
     // validateInfo(infoRegister) {
 
