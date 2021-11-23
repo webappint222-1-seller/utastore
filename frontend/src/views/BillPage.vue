@@ -225,7 +225,7 @@ export default {
       console.log(`in loop`)
       for (let i = 0; i < this.cartInfo.length; i++) {
         // let q = this.q
-        this.totalQuantity += this.cartInfo[i].quantity
+        this.totalQuantity += this.cartInfo[i].order_quantity
         this.click = true;
       }
 
@@ -234,7 +234,7 @@ export default {
     countPrice() {
       console.log(`in price ${this.cartInfo[0].totalprice}`)
       for (let i = 0; i < this.cartInfo.length; i++) {
-        this.totalPrice += this.cartInfo[i].totalprice
+        this.totalPrice += this.cartInfo[i].total_price_product_id
         this.click = true;
       }
     },
