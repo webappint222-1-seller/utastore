@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       // url: " http://localhost:5000/infoAccounts",
-      url: 'https://www.utastore:3006',
+      url: 'https://www.utastore.team:3006',
       currentUser: null,
     };
   },

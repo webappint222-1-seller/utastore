@@ -99,7 +99,7 @@ export default {
       totalQuantity: 0,
       totalPrice: 0,
       // url: 'http://localhost:5001/productInfo',
-      url: 'https://www.utastore:3006',
+      url: 'https://www.utastore.team:3006',
       carturl: 'http://localhost:5002/cartInfo',
       click: false,
       value: 1
