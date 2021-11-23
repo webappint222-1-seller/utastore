@@ -9,8 +9,8 @@ const { signupValidation, loginValidation } = require("./app/models/validation.j
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// const fs = require('fs');
-// const https = require('https');
+const fs = require('fs');
+const https = require('https');
 const status = require('http-status');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,10 +25,10 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   next();
 });
-// const options = {
-//   key: fs.readFileSync('etc/key.pem'),
-//   cert: fs.readFileSync('etc/cert.pem')
-// };
+const options = {
+  key: fs.readFileSync('etc/key.pem'),
+  cert: fs.readFileSync('etc/cert.pem')
+};
 
 const whitelist ="https://utastore.team";
 const corsOptions = {
@@ -387,7 +387,7 @@ app.post('/orderhasproduct', multerSigleUpload.single('image'), (req, res, next)
 });
 
 const PORT = process.env.PORT || 3006;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
-// https.createServer(options, app).listen(PORT);
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}.`);
+// });
+https.createServer(options, app).listen(PORT);
