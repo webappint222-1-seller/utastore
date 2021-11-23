@@ -26,7 +26,7 @@
             <span class="text-red-500 bg-opacity-80 font-medium rounded-sm">{{ errors[0] }}</span>
           </validation-provider>
 
-          <validation-provider v-slot="{ errors }" name="Password" rules="required|min">
+          <validation-provider v-slot="{ errors }" name="Password" rules="required|min:8">
             <span class="flex shadow-md mt-5 mb-1 text-xs">
               <span
                 class="bg-lightpink w-24 font-bold text-center text-black p-3 px-3 rounded-l"

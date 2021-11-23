@@ -104,30 +104,29 @@ app.post('/formdataupload', multerSigleUpload.single('image'), function (req, re
 });
 
 app.put('/productupdate/:productId', multerSigleUpload.single('image'), function (req, res, next) {
-  if (!req.cookies['jwt']) {
-    return res.status(401).send("must login")
-  } else {
-    const theCookie = req.cookies['jwt'];
-    const decoded = jwt.verify(theCookie, 'secrect');
-    if (!decoded) {
-      return res.status(401).send("unauthebtucated")
-    }
-    sql.connect((err) => {
-      sql.query('SELECT * FROM user where user_id=' + decoded.id, function (error, results) {
-        if (results[0].role == 1) {
-          var db = "UPDATE product SET `product_name` = '" + req.body.product_name + "', `band_name` = '" + req.body.band_name + "' , `price` = '" + req.body.price + "',product_des = '" + req.body.product_des + "',image = '" + suff + ".png" + "' WHERE product_id = '" + req.params.productId + "'"
-          sql.query(db, function (err, result) {
-            console.log(db);
-            console.log(result);
-          });
-        } else {
-          return res.status(401).send("must be admin to edit product")
-        }
-      });
-    });
-  }
-  res.redirect('/');
 
+  var db = "UPDATE product SET product_name = '" + req.body.product_name + "', band_name = '" + req.body.band_name + "' , price = '" + req.body.price + "',product_des = '" + req.body.product_des + "',image = '" + suff + ".png" + "' WHERE product_id = '" + req.params.productId + "'"
+  sql.query(db, function (err, result) {
+    console.log(db);
+    console.log(result);
+  });
+
+res.redirect('/');
+
+});
+
+app.delete('/products/:productId', multerSigleUpload.single('image'), (req, res) => {
+  var db = "delete from orderdetail_has_product where product_product_id='" + req.params.productId + "'"
+  sql.query(db, function (err, result) {
+    console.log(db);
+    console.log(result);
+  });
+  var db1 = "delete from product where product_id='" + req.params.productId + "'"
+  sql.query(db1, function (err, result) {
+    console.log(db1);
+    console.log(result);
+  });
+  res.redirect('/');
 });
 
 app.delete('/products/:productId', multerSigleUpload.single('image'), (req, res) => {

@@ -136,7 +136,7 @@ export default {
       selectedAbout: false,
       selectedTeam: false,
       // currentUser: null,
-      url: 'http://localhost:3006',
+      url: 'https://www.utastore.team:3006',
     }
   },
   components: {
