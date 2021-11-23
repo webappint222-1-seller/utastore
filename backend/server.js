@@ -300,7 +300,7 @@ app.put('/checkoutedit/:editid', multerSigleUpload.single('image'), (req, res, n
   sql.query(db, function (err, result) {
     console.log(db);
     console.log(result);
-    var db2 = "UPDATE orderDetail_has_product SET  total_quantity_product_id = '" + req.body.order_quantity + "' AND total_price_product_id ='" + req.body.total_price_product_id + "' WHERE (orderDetail_order_id = '" + req.params.editid + "')"
+    var db2 = "UPDATE orderDetail_has_product SET  total_quantity_product_id = '" + req.body.order_quantity + "' , total_price_product_id ='" + req.body.total_price_product_id + "' WHERE (orderDetail_order_id = '" + req.params.editid + "')"
     sql.query(db2, function (err, result2) {
       console.log(db2);
       console.log(result2);
