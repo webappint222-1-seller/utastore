@@ -560,8 +560,8 @@ export default {
           body: formData
         })
         console.log(`productName: ${this.nameForm}`)
-        this.cartInfo = [...this.cartInfo, formData]
         
+        // const data = await res.json()
         // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
         // this.editQuantity(newProductToCart)
@@ -585,6 +585,7 @@ export default {
           icon: 'success',
           title: 'Add to cart successfully'
         })
+        this.cartInfo = await this.getCartForm()
       }
       catch (error) { console.log(`add to cart failed: ${error}`) }
 
