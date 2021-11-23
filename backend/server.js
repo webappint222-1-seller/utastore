@@ -340,6 +340,13 @@ app.post('/checkout', multerSigleUpload.single('image'), (req, res, next) => {
   res.redirect('/');
 });
 
+app.get('/getalluser', signupValidation, multerSigleUpload.single('image'), function (req, res) {
+  var db = "SELECT * FROM user"
+  sql.query(db, function (err , result){
+    res.send(result);
+  })
+});
+
 app.get('/getcheckout', multerSigleUpload.single('image'), (req, res, next) => {
   var db = "SELECT * FROM product p, orderdetail od, orderdetail_has_product odh WHERE od.order_id = odh.orderDetail_order_id AND p.product_id = odh.product_product_id";
   sql.connect((err) => {
