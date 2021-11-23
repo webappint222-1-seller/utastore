@@ -1,6 +1,6 @@
 <template>
   <div class="bill">
-    <Navbar />
+    <Navbar @logout="logOutLocal" :role="userRole"/>
     <v-container class="flex">
       <v-layout column>
         <v-flex xs12 sm12 md12 lg12 class="justify-center">
@@ -102,7 +102,8 @@ export default {
       url: 'https://www.utastore.team:3006',
       carturl: 'http://localhost:5002/cartInfo',
       click: false,
-      value: 1
+      value: 1,
+      userData: null,
       // q: ''
 
     }
@@ -124,6 +125,26 @@ export default {
     //   }
     //   catch (error) { console.log(`get summary failed: ${error}`) }
     // },
+    async getUser() {
+      if (document.cookie == null) { return }
+      try {
+        const res = await fetch(this.url + "/getuser", {
+          credentials: 'include'
+        })
+        const getuserdata = await res.json()
+        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.name}`)
+
+        return getuserdata
+      }
+      catch (error) {
+        console.log(`get user failed: ${error}`)
+
+      }
+
+
+      // console.log(`user: ${this.productInfo[0]}`)
+
+    },
 
     async getCartForm() {
       try {
@@ -261,7 +282,7 @@ export default {
           this.deleteAfterCart()
 
 
-        }
+        }else{this.totalQuantity = 0, this.totalPrice = 0}
 
       })
 
@@ -271,7 +292,8 @@ export default {
 
   async created() {
     this.cartInfo = await this.getCartForm()
-
+    this.userData = await this.getUser();
+    this.userRole = this.userData.data.role
   }
 
 }
