@@ -19,7 +19,7 @@
                         <span>Order Price: {{ cInfo.price }} yen</span>
                       </li>
                       <li>
-                        <span>Total Order Price: {{ cInfo.totalprice }} yen</span>
+                        <span>Total Order Price: {{ cInfo.total_price_product_id }} yen</span>
                       </li>
                       <li>
                         <span>Quantity: {{ cInfo.order_quantity }}</span>
@@ -33,7 +33,7 @@
                     <template>
                       <vue-numeric-input
                         @change="editQuantityInCart(cInfo)"
-                        v-model="cInfo.quantity"
+                        v-model="cInfo.order_quantity"
                         :min="1"
                         :max="10"
                         :inputtable="false"
