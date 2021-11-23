@@ -66,7 +66,7 @@ const storage = multer.diskStorage({
     callback(null, './public/upload')
   },
   filename: function (res, file, callback) {
-    callback(null, suff + ".png")
+    callback(null, file.originalname)
   }
 });
 
@@ -88,7 +88,7 @@ app.post('/formdataupload', multerSigleUpload.single('image'), function (req, re
     sql.connect((err) => {
       sql.query('SELECT * FROM user where user_id=' + decoded.id, function (error, results) {
         if (results[0].role == 1) {
-          var db = "INSERT INTO `product`(`product_name`, `band_name`, `price`,`product_des`,`image`) VALUES ('" + req.body.product_name + "', '" + req.body.band_name + "', '" + req.body.price + "','" + req.body.product_des + "','" + suff + ".png" + "')";
+          var db = "INSERT INTO `product`(`product_name`, `band_name`, `price`,`product_des`,`image`) VALUES ('" + req.body.product_name + "', '" + req.body.band_name + "', '" + req.body.price + "','" + req.body.product_des + "','" + req.file.originalname + "')";
           sql.query(db, function (err, result) {
             console.log('inserted data');
             console.log(db);
