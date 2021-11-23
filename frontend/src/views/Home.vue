@@ -559,6 +559,8 @@ export default {
           // })
           body: formData
         })
+        const data = await res.json()
+        this.cartInfo = [...this.cartInfo, data]
         console.log(`productName: ${this.nameForm}`)
         
         // const data = await res.json()
