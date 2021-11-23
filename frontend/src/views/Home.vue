@@ -539,7 +539,7 @@ export default {
         }
       }
       try {
-          await fetch(this.url + "/checkout", {
+          const res = await fetch(this.url + "/checkout", {
           method: 'POST',
           credentials: 'include',
           // headers: {
