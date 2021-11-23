@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', "https://utastore.team");
+  res.header('Access-Control-Allow-Origin', "https://www.utastore.team");
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
@@ -30,7 +30,7 @@ const options = {
   cert: fs.readFileSync('etc/cert.pem')
 };
 
-const whitelist ="https://utastore.team";
+const whitelist ="https://www.utastore.team";
 const corsOptions = {
   origin: (origin,callback,res)=> {
     if( whitelist.indexOf(origin) !== -1){
