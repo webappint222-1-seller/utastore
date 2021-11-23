@@ -65,6 +65,7 @@ export default {
           console.log(`userList: ${Array.isArray(this.userList)} ${this.userList}`)
           // console.log(`infoAccounts: ${this.infoAccounts[0].emailaddress}`)
           // console.log(`value: ${this.infoAccounts = this.infoAccounts.filter((info) => info.emailaddress == infoRegister.emailaddress)}`)
+          console.log(this.userList[0])
           this.userList = this.userList.filter(
             (info) =>
               info.emailaddress == infoRegister.emailaddress
