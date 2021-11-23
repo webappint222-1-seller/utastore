@@ -12,11 +12,10 @@ pipeline {
             }
         }
 
-        stage('[Pre-Deploy]stop and remove old container && image'){
+        stage('[Pre-Deploy]stop and remove old container'){
 
             steps {
                 sh 'sudo docker-compose down'
-                sh 'sudo docker image prune -a -f'
                 echo '******************************'
                 }
             }
