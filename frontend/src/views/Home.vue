@@ -590,16 +590,17 @@ export default {
 
 
     },
-    async editQuantity() {
+    async editQuantity(product) {
+      product.order_quantity ++
       const formData = new FormData()      
-      formData.append('order_price', this.priceForm)
-      formData.append('order_quantity', this.defaultQuantity)
-      formData.append('order_id', this.cartInfo.order_id)
+      formData.append('order_price', product.order_price)
+      formData.append('order_quantity', product.order_quantity)
+      formData.append('order_id', product.order_id)
 
-      console.log(`orderId: ${this.cartInfo.order_id}`)
+      console.log(`orderId: ${product.order_id}`)
 
       try {
-        const res = await fetch(`${this.url}/checkoutedit/${this.order_id}`, {
+        const res = await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
           method: 'PUT',
         
           
