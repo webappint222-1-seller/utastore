@@ -689,7 +689,7 @@ export default {
       try {
         await fetch(`${this.url}/products/${deleteId}`, {
           method: 'DELETE',
-          credentials: 'include'
+          // credentials: 'include'
         })
         // this.productInfo = this.productInfo.filter(uta => uta.id !== deleteId)
         this.reloadProduct()
@@ -777,7 +777,7 @@ export default {
         console.log(`id2: ${this.editId}`)
         await fetch(`${this.url}/productupdate/${this.editId}`, {
           method: 'PUT',
-          credentials: 'include',
+          // credentials: 'include',
           // headers: {
           //   'content-type': 'application/json'
           // },
