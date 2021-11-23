@@ -560,7 +560,7 @@ export default {
           body: formData
         })
         console.log(`productName: ${this.nameForm}`)
-        this.cartInfo = await this.getCartForm()
+        this.cartInfo = [...this.cartInfo, await this.getCartForm()]
         // const data = await res.json()
         // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
