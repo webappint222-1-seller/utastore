@@ -94,9 +94,8 @@ import VueNumericInput from 'vue-numeric-input'
 export default {
   name: 'Bill',
   mounted() {
-    if (this.$route.params.data == null) { return }
-    this.userData = this.$route.params.data
-    this.userRole = this.$route.params.data.role    
+    this.userData = await this.getUser();
+    this.userRole = this.userData.data.role  
   },
   data() {
     return {
@@ -297,8 +296,6 @@ export default {
 
   async created() {
     this.cartInfo = await this.getCartForm()
-    this.userData = await this.getUser();
-    this.userRole = this.userData.data.role
   }
 
 }

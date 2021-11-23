@@ -559,9 +559,10 @@ export default {
           // })
           body: formData
         })
+        const data = await res.json()
         console.log(`productName: ${this.nameForm}`)
-        this.cartInfo = [...this.cartInfo, await this.getCartForm()]
-        // const data = await res.json()
+        this.cartInfo = [...this.cartInfo, data]
+        
         // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
         // this.editQuantity(newProductToCart)
