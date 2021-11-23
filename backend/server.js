@@ -257,18 +257,16 @@ app.post('/checkout', multerSigleUpload.single('image'), (req, res, next) => {
     if (!decoded) {
       return res.status(401).send("unauthebtucated")
     }
-    var db = "select order_id from orderdetail where order_id=(select max(order_id) from orderdetail);"
-    sql.query(db, function (err, result) {
-      console.log(db);
-      console.log(result);
-      var db2 = "INSERT INTO `orderdetail`( `order_price`, `order_quantity`,`user_user_id`) VALUES ('" + req.body.order_price + "', '" + req.body.order_quantity + "','" + decoded.id + "')";
+      var db2 = "INSERT INTO orderdetail( order_price, order_quantity,user_user_id) VALUES ('" + req.body.order_price + "', '" + req.body.order_quantity + "','" + decoded.id + "')";
       sql.query(db2, function (err, result2) {
         console.log(db2);
         console.log(result2);
       });
+      var db = "select order_id from orderdetail where order_id=(select max(order_id) from orderdetail);"
+      sql.query(db, function (err, result) {
       var plus = result[0].order_id + 1;
       var a = req.body.order_price * req.body.order_quantity
-      var db1 = "INSERT INTO `orderdetail_has_product`(`orderDetail_order_id`, `product_product_id`, `total_price_product_id`,`total_quantity_product_id`) VALUES ('" + plus + "','" + req.body.product_id + "', '" + a + "','" + req.body.order_quantity + "')";
+      var db1 = "INSERT INTO orderdetail_has_product(orderDetail_order_id, product_product_id, total_price_product_id,total_quantity_product_id) VALUES ('" + result[0].order_id + "','" + req.body.product_id + "', '" + a + "','" + req.body.order_quantity + "')";
       sql.connect((err) => {
         sql.query(db1, function (err, result1) {
           console.log(db1);
