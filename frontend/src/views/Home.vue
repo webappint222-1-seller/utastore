@@ -598,7 +598,6 @@ export default {
 
       console.log(`orderId: ${this.cartInfo.order_id}`)
 
-      newQuantity.quantity++
       try {
         const res = await fetch(`${this.url}/checkoutedit/${this.order_id}`, {
           method: 'PUT',
