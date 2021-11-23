@@ -171,7 +171,7 @@ export default {
     },
 
 
-    async editQuantity(product) {
+    async editQuantityInCart(product) {
       const formData = new FormData()      
       formData.append('order_price', product.order_price)
       formData.append('order_quantity', product.order_quantity)
