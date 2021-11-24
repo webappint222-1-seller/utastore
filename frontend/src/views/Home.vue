@@ -353,6 +353,9 @@ export default {
     logOutLocal() {
       this.userData = null
     },
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
 
     toggleDone() {
       this.addedit = !this.addedit
@@ -706,7 +709,7 @@ export default {
     async reloadProduct() {
       this.productInfo = await this.getProductForm()
     },
-
+    
     async reloadCart() {
       await sleep(500);
       this.cartInfo = await this.getCartForm()
