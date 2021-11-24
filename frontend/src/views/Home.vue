@@ -711,7 +711,7 @@ export default {
     },
     
     async reloadCart() {
-      await sleep(500);
+      await this.sleep(500);
       this.cartInfo = await this.getCartForm()
     },
 
