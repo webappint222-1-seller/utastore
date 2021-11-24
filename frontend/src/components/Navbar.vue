@@ -136,6 +136,8 @@ export default {
       selectedAbout: false,
       selectedTeam: false,
       // currentUser: null,
+      userData: null,
+      role: null,
       url: 'https://www.utastore.team:3006',
     }
   },
@@ -156,6 +158,22 @@ export default {
       catch (error) { console.log(`Log Out failed: ${error}`) }
     },
 
+  async getUser() {
+      if (document.cookie == null) { return }
+      try {
+        const res = await fetch(this.url + "/getuser", {
+          credentials: 'include'
+        })
+        const getuserdata = await res.json()
+        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.name}`)
+
+        return getuserdata
+      }
+      catch (error) {
+        console.log(`get user failed: ${error}`)
+
+      }
+  }
   //   getCookie = (name) => {
   //   const c = document.cookie.split(';').find(c => c.trim().startsWith(name + '='));
   //   return c ? c.substring((name + '=').length) : null;
@@ -188,6 +206,10 @@ export default {
   // async created() {
   //   this.currentUser = await this.getUser();
   // }
+  async created() {
+    this.userData = await this.getUser();
+    this.role = this.userData.data.role
+  }
 }
 </script>
   
