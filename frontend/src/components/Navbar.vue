@@ -128,7 +128,6 @@ export default {
   emits: ['logout'],
   name: 'Navbar',
   // recieve role form Home
-  props: {role: null},
   data() {
     return {
       switchLeftNavi: false,
