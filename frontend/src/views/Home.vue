@@ -154,7 +154,7 @@
 
             <div v-if="userRole == 2">
               <v-card-actions class="justify-center">
-                <v-btn @click.prevent="productInCart(uta),delay(),reloadCart()" color="#FFB6C1" small>
+                <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -350,12 +350,6 @@ export default {
     // getEmail(infoEmail) {
     //   infoEmail.emailaddress = this.defaEmail
     // },
-    sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-    },
-    async delay(){
-      await this.sleep(500);
-    },
     logOutLocal() {
       this.userData = null
     },
@@ -566,7 +560,7 @@ export default {
           body: formData
         })  
         console.log(`productName: ${this.nameForm}`)
-        this.cartInfo = await this.getCartForm()
+        await this.reloadCart();
         // const data = await res.json()
         // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
@@ -625,7 +619,7 @@ export default {
           // })
           body: formData
         })
-        this.delay(500);
+        await this.reloadCart();
       }
       catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
 
