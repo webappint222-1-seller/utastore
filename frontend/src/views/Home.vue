@@ -154,7 +154,7 @@
 
             <div v-if="userRole == 2">
               <v-card-actions class="justify-center">
-                <v-btn @click.prevent="productInCart(uta),reloadCart()" color="#FFB6C1" small>
+                <v-btn @click.prevent="productInCart(uta),delay(),reloadCart()" color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -350,6 +350,12 @@ export default {
     // getEmail(infoEmail) {
     //   infoEmail.emailaddress = this.defaEmail
     // },
+    sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    async delay(){
+      await this.sleep(500);
+    },
     logOutLocal() {
       this.userData = null
     },
