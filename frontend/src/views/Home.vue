@@ -711,8 +711,8 @@ export default {
     },
     
     async reloadCart() {
-      await this.sleep(500);
       this.cartInfo = await this.getCartForm()
+      console.logs(this.cartInfo[0].product.order_quantity)
     },
 
     // EDIT
