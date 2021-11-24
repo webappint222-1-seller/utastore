@@ -625,6 +625,7 @@ export default {
           // })
           body: formData
         })
+        this.delay(500);
       }
       catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
 
