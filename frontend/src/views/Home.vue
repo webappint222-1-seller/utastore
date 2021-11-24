@@ -602,7 +602,7 @@ export default {
       console.log(`orderId: ${product.order_id}`)
 
       try {
-        const res = await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
+          await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
           method: 'PUT',
         
           
