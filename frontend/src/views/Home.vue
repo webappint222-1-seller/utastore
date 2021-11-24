@@ -620,19 +620,7 @@ export default {
           // })
           body: formData
         })
-        const data = await res.json()
-        this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === this.order_id ?
-          {
-            ...cInfo,
-
-            name: data.name,
-            band: data.band,
-            price: data.price,
-            des: data.des,
-            quantity: data.quantity,
-            totalprice: data.totalprice
-          } : cInfo
-        )
+        
       }
       catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
 
