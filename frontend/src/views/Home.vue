@@ -154,7 +154,7 @@
 
             <div v-if="userRole == 2">
               <v-card-actions class="justify-center">
-                <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small>
+                <v-btn @click.prevent="productInCart(uta),reloadCart()" color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -585,7 +585,6 @@ export default {
           icon: 'success',
           title: 'Add to cart successfully'
         })
-        this.cartInfo = await this.getCartForm()
       }
       catch (error) { console.log(`add to cart failed: ${error}`) }
 
@@ -620,7 +619,6 @@ export default {
           // })
           body: formData
         })
-        this.cartInfo = await this.getCartForm()
       }
       catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
 
@@ -710,6 +708,7 @@ export default {
     },
 
     async reloadCart() {
+      await sleep(500);
       this.cartInfo = await this.getCartForm()
     },
 
