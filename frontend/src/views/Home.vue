@@ -353,10 +353,7 @@ export default {
     logOutLocal() {
       this.userData = null
     },
-    sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    },
-
+    
     toggleDone() {
       this.addedit = !this.addedit
     },
@@ -563,7 +560,7 @@ export default {
           body: formData
         })  
         console.log(`productName: ${this.nameForm}`)
-        
+        this.cartInfo = await this.getCartForm()
         // const data = await res.json()
         // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
@@ -712,7 +709,6 @@ export default {
     
     async reloadCart() {
       this.cartInfo = await this.getCartForm()
-      console.logs(this.cartInfo[0].product.order_quantity)
     },
 
     // EDIT
