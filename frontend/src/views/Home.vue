@@ -104,6 +104,7 @@
                           ref="image"
                           name="image"
                           @change="uploadImage($event)"
+                          required
                           class="mt-4 h-8 w-40 rounded border-black border-2"
                         />
                       </div>
