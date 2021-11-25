@@ -160,7 +160,7 @@ app.delete('/products/:productId', multerSigleUpload.single('image'), (req, res)
   }
 });
 
-app.post('/formdatausersupload', signupValidation, multerSigleUpload.single('image'), function (req, res) {
+app.post('/formdatausersupload',  multerSigleUpload.single('image'), function (req, res) {
   console.log('file received');
   console.log(req);
   var asd = "SELECT emailaddress FROM user where emailaddress = lower('" + req.body.emailaddress + "')"
@@ -180,7 +180,7 @@ app.post('/formdatausersupload', signupValidation, multerSigleUpload.single('ima
   });
 });
 
-app.post('/login', loginValidation, multerSigleUpload.single('image'), function (req, res) {
+app.post('/login',  multerSigleUpload.single('image'), function (req, res) {
   console.log('file received');
   console.log(req);
   var db = "SELECT * FROM user where emailaddress = lower('" + req.body.emailaddress + "')"
