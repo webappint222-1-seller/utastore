@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', "https://www.utastore.team");
+  res.header('Access-Control-Allow-Origin', "http://localhost:8080");
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
@@ -30,10 +30,10 @@ const options = {
   cert: fs.readFileSync('etc/cert.pem')
 };
 
-const whitelist ="https://www.utastore.team";
+const whitelist ="http://localhost:8080";
 const corsOptions = {
   origin: (origin,callback,res)=> {
-    if( whitelist.indexOf(origin) !== -1){
+    if(!origin ||  whitelist.indexOf(origin) !== -1){
       callback(null, true)
     }else{
       callback(status[401] + " you dont have right to enter this page")
@@ -191,9 +191,10 @@ app.post('/login', loginValidation, multerSigleUpload.single('image'), function 
           var token = jwt.sign({ id: result1[0].user_id }, 'secrect', { expiresIn: '1d' });
           console.log(token);
           res.cookie('jwt', token, { maxAge: 24 * 60 * 60 * 1000 });
-          res.status(200).json("pass");
+          res.status(200).json({data: 1});
+                  
         } else {
-          res.status(401).json("email or password is wrong")
+          res.status(401).json({data: 0})  
         }
       });
     });
@@ -238,9 +239,29 @@ app.get('/getuser', multerSigleUpload.single('image'), (req, res, next) => {
     }
     sql.query('SELECT * FROM user where user_id=?', decoded.id, function (error, results) {
       if (error) throw error;
-      res.send({ data: results[0], message: 'Fetch Successfully.' });
+      res.send({ data: results[0]});
     });
   }
+});
+
+app.put('/updateuserinfo/:userid', multerSigleUpload.single('image'), function (req, res) {
+  var db = "UPDATE user SET name = '"+ req.body.name +"', phonenumber = '"+ req.body.phonenumber+"', DOB = '"+ req.body.DOB + "', address = '"+ req.body.address + "' WHERE user_id = '" + req.params.userid + "'";
+            sql.query(db, function (err, result) {
+              console.log('inserted data');
+              console.log(db);
+              console.log(result);
+            });
+    res.redirect('/');
+});
+
+app.delete('/deleteuserinfo/:userid', multerSigleUpload.single('image'), function (req, res) {
+  var db = "Delete from user where user_id = '" + req.params.userid + "'";
+            sql.query(db, function (err, result) {
+              console.log('inserted data');
+              console.log(db);
+              console.log(result);
+            });
+    res.redirect('/');
 });
 
 app.post('/clearuser', multerSigleUpload.single('image'), (req, res, next) => {
@@ -374,9 +395,6 @@ app.get('/getcheckoutbyid', multerSigleUpload.single('image'), (req, res, next) 
     });
 });
 
-
-
-
 app.post('/orderhasproduct', multerSigleUpload.single('image'), (req, res, next) => {
   // const theCookie = req.cookies['jwt'];
   // const decoded = jwt.verify(theCookie, 'secrect');
@@ -387,6 +405,14 @@ app.post('/orderhasproduct', multerSigleUpload.single('image'), (req, res, next)
     console.log(result);
   });
   res.redirect('/');
+});
+
+app.post('/searchproduct', multerSigleUpload.single('image') ,function (req, res) {
+  var db = "SELECT * FROM product WHERE product_name LIKE LOWER('%"+ req.body.product_name + "%');"
+  sql.query(db, function (err , result){
+    console.log(db);
+    res.send(result);
+  })
 });
 
 const PORT = process.env.PORT || 3006;

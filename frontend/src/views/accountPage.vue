@@ -3,9 +3,8 @@
     <Navbar @logout="logOutLocal" :role="userRole" />
     <v-container class="flex justify-center w-auto h-auto">
       <v-flex xs10 sm10 md8 lg9 class="pa-2 justify-center">
-      
         <!-- ----------------------------------------------------------------------------------------------------------- -->
-        
+
         <v-container class="flex mb-40">
           <v-layout row warp>
             <v-row class="justify-center">
@@ -14,18 +13,14 @@
 
                 <v-layout warp>
                   <v-row class="justify-center">
-                    <div v-for="a in infoAccounts" :key="a.id">
+                    <div v-for="a in userDataFromRole" :key="a.user_id">
                       <v-card flat height="auto" width="180" class="my-10 mx-4" color="#C0C0C0">
                         <v-card-text class="justify-center text-sm black--text">
                           <ul>
-                            <li class="font-bold">Email:</li>
-                            <li>{{ a.emailaddress }}</li>
-                            <li class="pt-2 font-bold">Password:</li>
-                            <li>{{ a.password }}</li>
                             <li class="pt-2 font-bold">Name:</li>
                             <li>{{ a.name }}</li>
                             <li class="pt-2 font-bold">Phone:</li>
-                            <li>{{ a.phonenumber }}</li>
+                            <li>0{{ a.phonenumber }}</li>
                             <li class="pt-2 font-bold">Date of Birth:</li>
                             <li>{{ a.DOB }}</li>
                             <li class="pt-2 font-bold">Address:</li>
@@ -34,12 +29,22 @@
                         </v-card-text>
 
                         <v-card-actions class="justify-center">
-                          <v-btn @click="showAccount(a)" color="yellow darken-4" small>
-                            <v-icon small>edit</v-icon>
-                          </v-btn>
-                          <v-btn @click="deleteAccount(a.user_id)" class color="red darken-4" small>
-                            <v-icon small>delete</v-icon>
-                          </v-btn>
+                          <div v-if="userRole == 2 || userRole == 1" class= "mr-2" >
+                            <v-btn @click="showAccount(a)" color="yellow darken-4" small>
+                              <v-icon small>edit</v-icon>
+                            </v-btn>
+                          </div>
+                            
+                          <div v-if="userRole == 1" class= "ml-2" >
+                            <v-btn
+                              @click="deleteAccount(a.user_id)"
+                              class
+                              color="red darken-4"
+                              small
+                            >
+                              <v-icon small>delete</v-icon>
+                            </v-btn>
+                          </div>
                         </v-card-actions>
                       </v-card>
                     </div>
@@ -54,28 +59,6 @@
                   <v-card-text>
                     <validation-observer ref="observer" v-slot="{ invalid }">
                       <form>
-                        <validation-provider v-slot="{ errors }" name="Email" rules="required">
-                          <v-text-field
-                            v-model="editEmailForm"
-                            :error-messages="errors"
-                            label="Email"
-                            required
-                            single-line
-                            color="black"
-                          ></v-text-field>
-                        </validation-provider>
-
-                        <validation-provider v-slot="{ errors }" name="Password" rules="required">
-                          <v-text-field
-                            v-model="editPasswordForm"
-                            :error-messages="errors"
-                            label="Password"
-                            required
-                            single-line
-                            color="black"
-                          ></v-text-field>
-                        </validation-provider>
-
                         <validation-provider v-slot="{ errors }" name="Name" rules="required">
                           <v-text-field
                             v-model="editNameForm"
@@ -160,6 +143,7 @@ import Footer from '@/components/Footer.vue'
 import { required, max, max_value, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 
+
 setInteractionMode('eager')
 
 extend('required', {
@@ -184,11 +168,11 @@ extend('numeric', {
 
 export default {
   name: 'acPage',
-  mounted() {
-    
-    this.userRole = this.role
-  },
-  props: {role: null},
+  // mounted() {
+
+  //   this.userRole = this.role
+  // },
+  props: { role: null },
   data() {
     return {
       addedit: false,
@@ -201,12 +185,14 @@ export default {
       editAddressForm: '',
       defaultQuantity: 1,
 
-      fileForm: null,
+
       addCart: '',
       cartInfo: [],
       productInfo: [],
-      infoAccounts: [],
+
       userData: null,
+      userRole: null,
+      userDataFromRole: null,
       inEditMode: false,
       addCartMode: false,
       editId: '',
@@ -218,7 +204,7 @@ export default {
       // url: 'http://localhost:5001/productInfo',
       // carturl: 'http://localhost:5002/cartInfo',
       // accounturl: 'http://localhost:5000/infoAccounts',
-      // url: 'https://www.utastore.team:3006',
+      // url: 'http://localhost:3006',
       url: 'https://www.utastore.team:3006',
 
     }
@@ -229,7 +215,7 @@ export default {
     Navbar,
     Footer,
     ValidationProvider,
-    ValidationObserver,  
+    ValidationObserver,
   },
 
   methods: {
@@ -239,8 +225,8 @@ export default {
 
     clear() {
       this.$refs.observer.reset()
-      this.editEmailForm = ''
-      this.editPasswordForm = ''
+      // this.editEmailForm = ''
+      // this.editPasswordForm = ''
       this.editNameForm = ''
       this.editPhoneForm = ''
       this.editDateForm = ''
@@ -248,7 +234,7 @@ export default {
 
     },
 
-    
+
     submitAccountForm() {
       this.$refs.observer.validate()
 
@@ -258,40 +244,35 @@ export default {
       // console.log(`productDes: ${this.desForm}`)
       // console.log(`image: ${this.fileForm}`)
 
-      if (this.editEmailFormForm !== '' &&
-        this.editPasswordForm !== '' &&
+      if (
+        // this.editEmailFormForm !== '' &&
+        //   this.editPasswordForm !== '' &&
         this.editNameForm !== '' &&
         this.editPhoneForm !== '' &&
         this.editDateForm !== '' &&
         this.editAddressForm !== '') {
-      
+
         // EDIT-2
         if (this.inEditMode) {
           this.editAccount({
-            id: this.editId,
-            email: this.editEmailForm,
-            password: this.editPasswordForm,
-            name: this.editNameForm,
-            phone: this.editPhoneForm,
-            date: this.editDateForm,
-            address: this.editAddressForm,
+            // id: this.editId,            
+            // name: this.editNameForm,
+            // phone: this.editPhoneForm,
+            // date: this.editDateForm,
+            // address: this.editAddressForm,
           })
         }
-        else {
-          this.addNewAccountForm({
-            email: this.editEmailForm,
-            password: this.editPasswordForm,
-            name: this.editNameForm,
-            phone: this.editPhoneForm,
-            date: this.editDateForm,
-            address: this.editAddressForm,
-          })
-        }
+        // else {
+        //   this.addNewAccountForm({          
+        //     name: this.editNameForm,
+        //     phone: this.editPhoneForm,
+        //     date: this.editDateForm,
+        //     address: this.editAddressForm,
+        //   })
+        // }
 
       }
-      this.editEmailForm = '',
-        this.editPasswordForm = '',
-        this.editNameForm = '',
+      this.editNameForm = '',
         this.editPhoneForm = '',
         this.editDateForm = '',
         this.editAddressForm = ''
@@ -299,43 +280,9 @@ export default {
       requestAnimationFrame(() => {
         this.$refs.observer.reset();
       });
-    },
+    },   
 
-    // POST
-
-    async addNewAccountForm(newAccountForm) {
-      try {
-        const res = await fetch(this.accounturl, {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: newAccountForm.email,
-            password: newAccountForm.password,
-            name: newAccountForm.name,
-            phone: newAccountForm.phone,
-            date: newAccountForm.date,
-            address: newAccountForm.address,
-          })
-        })
-        const data = await res.json()
-        this.productInfo = [...this.productInfo, data]
-      }
-      catch (error) { console.log(`save failed: ${error}`) }
-    },
-
-    // GET
-    async getAccount() {
-      try {
-        const res = await fetch(this.url + "/customers")
-        const getaccountdata = await res.json()
-        return getaccountdata
-
-      }
-      catch (error) { console.log(`get account failed: ${error}`) }
-    },
-
+    // GET    
     async getUser() {
       if (document.cookie == null) { return }
       try {
@@ -343,7 +290,7 @@ export default {
           credentials: 'include'
         })
         const getuserdata = await res.json()
-        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.role}`)
+        // console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.role}`)
 
         return getuserdata
       }
@@ -351,6 +298,45 @@ export default {
         console.log(`get user failed: ${error}`)
 
       }
+
+
+      // console.log(`user: ${this.productInfo[0]}`)
+    },
+
+    async getRole() {
+      if (document.cookie == null) { return }
+      else if (this.userRole == 1) {
+      try {
+        const res = await fetch(this.url + "/getalluser", {
+          
+        })
+        const getuserdata = await res.json()
+        // console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.role}`)
+
+        return getuserdata
+      }
+      catch (error) {
+        console.log(`get user failed: ${error}`)
+
+      }
+      } else if (this.userRole == 2) {
+       try {
+        const res = await fetch(this.url + "/getuser", {
+          credentials: 'include'
+        })
+        const getuserdata = await res.json()
+        // console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.role}`)
+
+        return getuserdata
+      }
+      catch (error) {
+        console.log(`get user failed: ${error}`)
+
+      }
+      
+      }
+
+
       // console.log(`user: ${this.productInfo[0]}`)
     },
 
@@ -358,7 +344,7 @@ export default {
 
     async deleteAccount(deleteAccountId) {
       try {
-        await fetch(`${this.url}/customers/${deleteAccountId}`, {
+        await fetch(`${this.url}/deleteuserinfo/${deleteAccountId}`, {
           method: 'DELETE'
         })
         // this.infoAccounts = this.infoAccounts.filter(a => a.id !== deleteAccountId)
@@ -377,47 +363,58 @@ export default {
 
     showAccount(accountInfo) {
       this.inEditMode = true
-      this.editId = accountInfo.id
-      this.editEmailForm = accountInfo.email
-      this.editPasswordForm = accountInfo.password
+      this.editId = accountInfo.user_id
       this.editNameForm = accountInfo.name
-      this.editPhoneForm = accountInfo.phone
-      this.editDateForm = accountInfo.date
+      this.editPhoneForm = accountInfo.phonenumber
+      this.editDateForm = accountInfo.DOB
       this.editAddressForm = accountInfo.address
     },
 
-    async editAccount(newAccountInfo) {
+    async editAccount() {
+      const formData = new FormData()
+      formData.append('name', this.editNameForm)
+      formData.append('phonenumber', this.editPhoneForm)
+      formData.append('DOB', this.editDateForm)
+      formData.append('address', this.editAddressForm)
       try {
-        const res = await fetch(`${this.accounturl}/${newAccountInfo.id}`, {
+        await fetch(`${this.url}/updateuserinfo/${this.editId}`, {
           method: 'PUT',
-          headers: {
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: newAccountInfo.email,
-            password: newAccountInfo.password,
-            name: newAccountInfo.name,
-            phone: newAccountInfo.phone,
-            date: newAccountInfo.date,
-            address: newAccountInfo.address
-          })
+          body: formData
         })
-        const data = await res.json()
-        this.infoAccounts = this.infoAccounts.map(a => a.id === newAccountInfo.id ?
-          {
-            ...a,
-            email: data.email,
-            password: data.password,
-            name: data.name,
-            phone: data.phone,
-            date: data.date,
-            address: data.address
-          } : a
-        )
+        const Toast = this.$swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', this.$swal.stopTimer)
+            toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+          }
+        })
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Edit account successfully'
+        })
+
+        this.$refs.observer.reset()
+        this.userData = await this.getUser();
+        this.$router.go(0);
+        // const data = await res.json()
+        // this.infoAccounts = this.infoAccounts.map(a => a.id === newAccountInfo.id ?
+        //   {
+        //     ...a,
+        //     email: data.email,
+        //     password: data.password,
+        //     name: data.name,
+        //     phone: data.phone,
+        //     date: data.date,
+        //     address: data.address
+        //   } : a
+        // )
         this.inEditMode = false
         this.editId = ''
-        this.editEmailForm = ''
-        this.editPasswordForm = ''
         this.editNameForm = ''
         this.editPhoneForm = ''
         this.editDateForm = ''
@@ -431,10 +428,9 @@ export default {
 
   // GET-2
   async created() {
-    // this.productInfo = await this.getProductForm()
-    // this.cartInfo = await this.getCartForm()
-    this.infoAccounts = await this.getAccount()
     this.userData = await this.getUser();
+    this.userRole = this.userData.data.role;
+    this.userDataFromRole = await this.getRole();
 
   }
 

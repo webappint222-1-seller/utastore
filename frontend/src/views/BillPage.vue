@@ -1,6 +1,6 @@
 <template>
   <div class="bill">
-    <Navbar @logout="logOutLocal" :role="userRole"/>
+    <Navbar @logout="logOutLocal" :role="userRole" />
     <v-container class="flex">
       <v-layout column>
         <v-flex xs12 sm12 md12 lg12 class="justify-center">
@@ -45,7 +45,11 @@
                     </template>
                   </li>
                   <li>
-                    <v-btn @click="deleteCart(cInfo.order_id)" color="red darken-4" class="ml-24 mb-2">
+                    <v-btn
+                      @click="deleteCart(cInfo.order_id)"
+                      color="red darken-4"
+                      class="ml-24 mb-2"
+                    >
                       <v-icon>delete</v-icon>
                     </v-btn>
                   </li>
@@ -93,9 +97,9 @@ import VueNumericInput from 'vue-numeric-input'
 
 export default {
   name: 'Bill',
-  mounted() {
-    this.created() 
-  },
+  // mounted() {
+  //   this.created() 
+  // },
   data() {
     return {
       cartInfo: [],
@@ -103,7 +107,8 @@ export default {
       totalPrice: 0,
       // url: 'http://localhost:5001/productInfo',
       url: 'https://www.utastore.team:3006',
-      carturl: 'http://localhost:5002/cartInfo',
+      // url: 'http://localhost:3006',
+      // carturl: 'http://localhost:5002/cartInfo',
       click: false,
       value: 1,
       userData: null,
@@ -119,15 +124,7 @@ export default {
 
   },
   methods: {
-    // async getCartForm() {
-    //   try {
-    //     const res = await fetch(this.carturl)
-    //     const getcartdata = await res.json()
-    //     return getcartdata
-
-    //   }
-    //   catch (error) { console.log(`get summary failed: ${error}`) }
-    // },
+    //GET
     async getUser() {
       if (document.cookie == null) { return }
       try {
@@ -155,10 +152,10 @@ export default {
           credentials: 'include'
         })
         const getcartdata = await res.json()
-        
+
         // console.log(`cartdata: ${typeof getcartdata} ${getcartdata.quantity}`)
         return getcartdata
-        
+
 
       }
       catch (error) { console.log(`get cart failed: ${error}`) }
@@ -168,11 +165,11 @@ export default {
       try {
         await fetch(`${this.url}/checkoutdelete/${deleteCartId}`, {
           method: 'DELETE',
-          
+
         })
         this.cartInfo = await this.getCartForm()
         this.cartInfo = this.cartInfo.filter(cInfo => cInfo.id !== deleteCartId)
-        
+
       }
       catch (error) {
         console.log(`delete cart failed: ${error}`)
@@ -197,7 +194,7 @@ export default {
 
     async editQuantityInCart(product) {
       product.total_price_product_id = product.order_price * product.order_quantity
-      const formData = new FormData()      
+      const formData = new FormData()
       formData.append('order_quantity', product.order_quantity)
       formData.append('total_price_product_id', product.total_price_product_id)
       formData.append('order_id', product.order_id)
@@ -207,8 +204,8 @@ export default {
       try {
         const res = await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
           method: 'PUT',
-        
-          
+
+
           // headers: {
           //   'content-type': 'application/json'
           // },
@@ -285,7 +282,7 @@ export default {
           this.deleteAfterCart()
 
 
-        }else{this.totalQuantity = 0, this.totalPrice = 0}
+        } else { this.totalQuantity = 0, this.totalPrice = 0 }
 
       })
 

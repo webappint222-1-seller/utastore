@@ -3,14 +3,37 @@
     <!-- sent role to Navbar -->
     <Navbar @logout="logOutLocal" :role="userRole" />
     <!-- <LoginPage @login-data="getEmail" hidden/> -->
-    <GoTop :size="60" :radius="4" weight="bold" :bottom="200" :right="60" :boundary="800" fg-color="#FFB6C1" bg-color="#343434" ></GoTop>
+    <GoTop
+      :size="60"
+      :radius="4"
+      weight="bold"
+      :bottom="200"
+      :right="60"
+      :boundary="800"
+      fg-color="#FFB6C1"
+      bg-color="#343434"
+    ></GoTop>
+    <v-container class="flex">
+      <v-flex xs1 sm1 md2 lg4 class>
+        <v-text-field
+          v-on:keyup.enter="submitSearchForm"
+          v-model="searchForm"
+          hide-details
+          single-line
+          color="white"
+          class="mt-10"
+          placeholder="Search by Single, Album Name"
+        ></v-text-field>
+        <v-btn @click="submitSearchForm" icon dark type="submit" class="ml-2 mt-10 bg-black rounded">
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+        <v-btn @click="reloadProduct()" icon dark class="ml-2 mt-10 bg-black rounded">
+          <v-icon>clear</v-icon>
+        </v-btn>
+      </v-flex>
+    </v-container>
     <v-container class="flex">
       <v-flex xs12 sm12 md12 lg12 class="justify-center">
-        <!-- <div v-show="this.userList.role == 1"> -->
-        <!-- <div v-for="user in userList" :key="user.name"> -->
-        <!-- USER:{{ this.userList.name }}
-        <br />
-        -->      
         <div v-if="userRole == 1">
           <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-10">
             <span>add / edit</span>
@@ -100,36 +123,12 @@
               </v-card-text>
             </v-card>
           </div>
-        </div>      
+        </div>
+        <!-- <div v-else-if="userRole == 2"> -->
+
+        <!-- </div> -->
       </v-flex>
     </v-container>
-    <!-- ----------------------------------------------------------------------------------------------------------- -->
-    <!-- Dummy -->
-    <!-- <v-container class="flex mb-40">
-      <v-layout row wrap>
-        <v-flex xs12 sm6 md6 lg3 wrap v-for="p in products" :key="p.title" class="justify-center">
-          <v-card dark flat class="pa-2 w-44 h-auto my-10">
-            <v-responsive>
-              <img :src="p.pic" class="w-40 h-40" />
-            </v-responsive>
-            <v-card-text class="justify-center text-xs break-words white--text">
-              <ul>
-                <li>{{ p.title }}</li>
-                <li class="pt-2">{{ p.band }}</li>
-                <li class="pt-2">{{ p.price }}</li>
-                <li class="pt-2">{{ p.des }}</li>
-              </ul>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-btn @click="dummyProductInCart(p)" color="#FFB6C1">
-                <v-icon>shopping_cart</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>-->
 
     <!---------------------------------------------------------------------------------------------------------------->
 
@@ -150,16 +149,14 @@
               </ul>
             </v-card-text>
 
-            
-
             <div v-if="userRole == 2">
               <v-card-actions class="justify-center">
-                <v-btn @click.prevent="productInCart(uta),reloadCart()" color="#FFB6C1" small>
+                <v-btn @click.prevent="productInCart(uta), reloadCart()" color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
             </div>
-          
+
             <div v-else-if="userRole == 1">
               <v-card-actions class="justify-center">
                 <v-btn @click="showProduct(uta)" color="yellow darken-4" small>
@@ -172,66 +169,69 @@
             </div>
 
             <div v-else>
-              <v-card-actions class="justify-center">              
+              <v-card-actions class="justify-center">
                 <v-btn disabled color="#FFB6C1" small>
                   <v-icon small>shopping_cart</v-icon>
                 </v-btn>
               </v-card-actions>
             </div>
-           
           </v-card>
         </v-flex>
       </v-layout>
 
       <div v-if="userRole == 2">
-      <v-layout column wrap mt-8>
-        <v-flex cols xs12 sm12 md12 lg12 wrap class="justify-center hidden-xs-only">
-          <v-responsive>
-          <v-card flat class="ml-10 pa-4 overflow-y-scroll lg:w-80 w-60" color="black"  height="520">
-            <span class="text-lg font-bold white--text">CART</span>
+        <v-layout column wrap mt-8>
+          <v-flex cols xs12 sm12 md12 lg12 wrap class="justify-center hidden-xs-only">
+            <v-responsive>
+              <v-card
+                flat
+                class="ml-10 pa-4 overflow-y-scroll lg:w-80 w-60"
+                color="black"
+                height="520"
+              >
+                <span class="text-lg font-bold white--text">CART</span>
 
-            <div v-for="cInfo in cartInfo" :key="cInfo.id">
-              <v-card dark flat class="w-auto h-auto my-4 py-4" color="#C0C0C0">
-                <v-layout wrap>
-                  <v-row class="justify-center">
-                    <v-card-text class="text-sm w-40  black--text">
-                      <span class= "font-medium">{{ cInfo.product_name }}</span>
-                    </v-card-text>
-                    <v-card-text class="text-sm w-40 black--text">
-                      <span class>Quantity: {{ cInfo.order_quantity }}</span>
-                      
-                    </v-card-text>
+                <div v-for="cInfo in cartInfo" :key="cInfo.id">
+                  <v-card dark flat class="w-auto h-auto my-4 py-4" color="#C0C0C0">
+                    <v-layout wrap>
+                      <v-row class="justify-center">
+                        <v-card-text class="text-sm w-40 black--text">
+                          <span class="font-medium">{{ cInfo.product_name }}</span>
+                        </v-card-text>
+                        <v-card-text class="text-sm w-40 black--text">
+                          <span class>Quantity: {{ cInfo.order_quantity }}</span>
+                        </v-card-text>
 
-                    <v-card-actions class="">
-                      <v-btn @click="deleteCart(cInfo.order_id)" color="red darken-4">
-                        <v-icon>delete</v-icon>
+                        <v-card-actions class>
+                          <v-btn @click="deleteCart(cInfo.order_id)" color="red darken-4">
+                            <v-icon>delete</v-icon>
+                          </v-btn>
+                        </v-card-actions>
+                      </v-row>
+                    </v-layout>
+                  </v-card>
+                </div>
+
+                <v-layout class="justify-center mt-4">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        @click="$router.push('/billpage')"
+                        v-bind="attrs"
+                        v-on="on"
+                        color="#FFB6C1"
+                        dark
+                      >
+                        <v-icon>shopping_basket</v-icon>
                       </v-btn>
-                    </v-card-actions>
-                  </v-row>
+                    </template>
+                    <span>Check Out</span>
+                  </v-tooltip>
                 </v-layout>
               </v-card>
-            </div>
-
-            <v-layout class="justify-center mt-4">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    @click="$router.push('/billpage')"
-                    v-bind="attrs"
-                    v-on="on"
-                    color="#FFB6C1"
-                    dark
-                  >
-                    <v-icon>shopping_basket</v-icon>
-                  </v-btn>
-                </template>
-                <span>Check Out</span>
-              </v-tooltip>
-            </v-layout>
-          </v-card>
-          </v-responsive>
-        </v-flex>
-      </v-layout>
+            </v-responsive>
+          </v-flex>
+        </v-layout>
       </div>
     </v-container>
     <Footer></Footer>
@@ -246,7 +246,7 @@
 
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
-// import LoginPage from '@/views/LoginPage.vue'
+
 import { required, max, max_value, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 import GoTop from '@inotom/vue-go-top';
@@ -283,7 +283,7 @@ export default {
   mounted() {
     if (this.$route.params.data == null) { return }
     this.userData = this.$route.params.data
-    this.userRole = this.$route.params.data.role    
+    this.userRole = this.$route.params.data.role
   },
   data() {
     return {
@@ -302,7 +302,7 @@ export default {
       quanForm: '',
       defaultQuantity: 1,
       defaultEmail: 'kamolwish2000@gmail.com',
-
+      searchForm: '',
       fileForm: null,
       addCart: '',
       cartInfo: [],
@@ -321,7 +321,7 @@ export default {
       // url: 'http://localhost:5001/productInfo',
       carturl: 'http://localhost:5002/cartInfo',
       url: 'https://www.utastore.team:3006',
-      // url: 'https://utastore:3006',
+      // url: 'http://localhost:3006',
     }
 
   },
@@ -337,7 +337,7 @@ export default {
 
   },
 
-  computed: {    
+  computed: {
 
   },
 
@@ -353,7 +353,7 @@ export default {
     logOutLocal() {
       this.userData = null
     },
-    
+
     toggleDone() {
       this.addedit = !this.addedit
     },
@@ -378,6 +378,14 @@ export default {
         }
         this.fileForm = imgFile
         readImage.readAsDataURL(imgFile)
+      }
+    },
+
+    submitSearchForm() {
+      if (this.searchForm !== '') {
+        this.searchProductForm({
+          product_name: this.searchForm
+        })
       }
     },
 
@@ -445,6 +453,26 @@ export default {
     },
 
     // POST
+    async searchProductForm() {
+      const formData = new FormData()
+      formData.append('product_name', this.searchForm)
+      if (this.searchForm == null) { return this.productInfo = await this.getProductForm() }
+      console.log(`search null data: ${typeof this.searchForm} ${this.searchForm}`)
+      try {
+        const res = await fetch(this.url + "/searchproduct", {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+
+        })
+        const data = await res.json()
+        this.productInfo = data
+        console.log(`search data: ${typeof this.searchForm} ${this.searchForm}`)
+      }
+      catch (error) { console.log(`search failed: ${error}`) }
+    },
+
+
     async addNewProductForm() {
       // const inputData = JSON.stringify({
       //   product_name: this.nameForm,
@@ -497,20 +525,20 @@ export default {
         Toast.fire({
           icon: 'success',
           title: 'Add new product successfully'
-        })        
+        })
         this.reloadProduct()
       }
       catch (error) { console.log(`save failed: ${error}`) }
     },
 
-    productInCart(utaInfo) {     
+    productInCart(utaInfo) {
       this.priceForm = utaInfo.price
       this.product_id = utaInfo.product_id
       this.nameForm = utaInfo.product_name
 
-    // console.log(`cartPrice: ${typeof this.priceForm} ${this.priceForm}`)
-    // console.log(`cartQuantity: ${typeof utaInfo.quantity} ${utaInfo.quantity}`)
-      this.addNewProductToCart({        
+      // console.log(`cartPrice: ${typeof this.priceForm} ${this.priceForm}`)
+      // console.log(`cartQuantity: ${typeof utaInfo.quantity} ${utaInfo.quantity}`)
+      this.addNewProductToCart({
         order_price: this.priceForm,
         order_quantity: this.defaultQuantity,
         product_id: this.product_id,
@@ -521,16 +549,16 @@ export default {
 
     async addNewProductToCart() {
 
-      const formData = new FormData()      
+      const formData = new FormData()
       formData.append('order_price', this.priceForm)
       formData.append('order_quantity', this.defaultQuantity)
       formData.append('product_id', this.product_id)
-      formData.append('product_name', this.nameForm)    
-       console.log(`----`)
+      formData.append('product_name', this.nameForm)
+      console.log(`----`)
       console.log(`priceincart: ${this.priceForm}`)
       console.log(`quantityincart: ${this.defaultQuantity}`)
       console.log(`productId: ${this.product_id}`)
-      
+
 
       for (let i = 0; i < this.cartInfo.length; i++) {
         if (this.cartInfo[i].product_name == this.nameForm) {
@@ -539,7 +567,7 @@ export default {
         }
       }
       try {
-          await fetch(this.url + "/checkout", {
+        await fetch(this.url + "/checkout", {
           method: 'POST',
           credentials: 'include',
           // headers: {
@@ -553,14 +581,14 @@ export default {
           //   des: newProductToCart.des,
           //   totalprice: newProductToCart.totalprice,
           //   quantity: newProductToCart.quantity,
-            // userEmail: newProductToCart.defaultEmail
-            
+          // userEmail: newProductToCart.defaultEmail
+
 
           // })
           body: formData
-        })  
+        })
         console.log(`productName: ${this.nameForm}`)
-        await this.reloadCart();
+
         // const data = await res.json()
         // console.log(`dataid:${data.id}`)
         // this.disabledbtn = true;
@@ -585,15 +613,16 @@ export default {
           icon: 'success',
           title: 'Add to cart successfully'
         })
+        this.cartInfo = await this.getCartForm()
       }
       catch (error) { console.log(`add to cart failed: ${error}`) }
 
 
     },
     async editQuantity(product) {
-      product.order_quantity ++
+      product.order_quantity++
       product.total_price_product_id = product.order_price * product.order_quantity
-      const formData = new FormData()      
+      const formData = new FormData()
       formData.append('order_quantity', product.order_quantity)
       formData.append('total_price_product_id', product.total_price_product_id)
       formData.append('order_id', product.order_id)
@@ -601,10 +630,10 @@ export default {
       console.log(`orderId: ${product.order_id}`)
 
       try {
-          await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
+        await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
           method: 'PUT',
-        
-          
+
+
           // headers: {
           //   'content-type': 'application/json'
           // },
@@ -619,7 +648,20 @@ export default {
           // })
           body: formData
         })
-        await this.reloadCart();
+        this.cartInfo = await this.getCartForm();
+        // const data = await res.json()
+        // this.cartInfo = this.cartInfo.map(cInfo => cInfo.id === this.order_id ?
+        //   {
+        //     ...cInfo,
+
+        //     name: data.name,
+        //     band: data.band,
+        //     price: data.price,
+        //     des: data.des,
+        //     quantity: data.quantity,
+        //     totalprice: data.totalprice
+        //   } : cInfo
+        // )
       }
       catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
 
@@ -643,10 +685,10 @@ export default {
           credentials: 'include'
         })
         const getcartdata = await res.json()
-        
+
         // console.log(`cartdata: ${typeof getcartdata} ${getcartdata.quantity}`)
         return getcartdata
-        
+
 
       }
       catch (error) { console.log(`get cart failed: ${error}`) }
@@ -673,7 +715,7 @@ export default {
       // console.log(`user: ${this.productInfo[0]}`)
 
     },
-  
+
     // DELETE
     async deleteProduct(deleteId) {
       try {
@@ -693,9 +735,9 @@ export default {
       try {
         await fetch(`${this.url}/checkoutdelete/${deleteCartId}`, {
           method: 'DELETE',
-          
+
         })
-        
+
         // this.cartInfo = this.cartInfo.filter(cInfo => cInfo.id !== deleteCartId)
         this.cartInfo = await this.getCartForm()
       }
@@ -707,7 +749,7 @@ export default {
     async reloadProduct() {
       this.productInfo = await this.getProductForm()
     },
-    
+
     async reloadCart() {
       this.cartInfo = await this.getCartForm()
     },
@@ -822,9 +864,6 @@ export default {
         this.fileForm = null
         var editImage = document.getElementById("imgid")
         editImage.src = ''
-
-
-
       }
       catch (error) {
         console.log(`edit failed: ${error}`)
@@ -834,10 +873,10 @@ export default {
 
   // GET-2
   async created() {
-    this.productInfo = await this.getProductForm()       
+    this.productInfo = await this.getProductForm()
     this.userData = await this.getUser();
     this.userRole = this.userData.data.role
-    this.cartInfo = await this.getCartForm(); 
+    this.cartInfo = await this.getCartForm();
 
     //  console.log(`type: ${this.userData.data}`)
   }

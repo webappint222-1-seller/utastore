@@ -30,15 +30,15 @@ export default {
     // Member
   },
   methods: {
-    async fetchEmailPassword() {
-      try {
-        const res = await fetch(this.url);
-        const data = await res.json();
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async fetchEmailPassword() {
+    //   try {
+    //     const res = await fetch(this.url);
+    //     const data = await res.json();
+    //     return data;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     // validateEmailPassword(EmailPassword) {
     //   console.log(EmailPassword.email);
 
@@ -149,7 +149,6 @@ export default {
       try {
         // console.log(`user: ${typeof this.currentUser}`)
         const res = await fetch(this.url + "/getuser", {
-
           
           credentials: 'include'
         })
@@ -160,11 +159,7 @@ export default {
         console.log(`get user failed: ${error}`)
 
       }
-      // console.log(`user: ${this.productInfo[0]}`)
-
-      // for (let i = 0; i < this.userList.length; i++) {
-      //   console.log(`user: ${this.userList[i]}`)
-      // }
+      // console.log(`user: ${this.productInfo[0]}`)    
     },
 
 
@@ -174,25 +169,18 @@ export default {
       const formData = new FormData()
       formData.append('emailaddress', emailPasword.email)
       formData.append('password', emailPasword.password)
-
+    
       try {
-        await fetch(this.url + "/login", {
-          method: 'POST',
-          // headers: {
-          //   'content-type': 'application/json'
-          // },
-          // body: JSON.stringify({
-          //   product_name: this.nameForm,
-          //   band_name: this.bandForm,         
-          // })
-
+        const res = await fetch(this.url + "/login", {
+          method: 'POST',         
           credentials: 'include',
           body: formData
 
-        })      
-
-        
-        const res = await this.getUser()        
+        })                  
+        // const res = await this.getUser()
+        const data = await res.json()
+        console.log(`data: ${data.data}`)  
+        if(data.data == 1){
 
         const Toast = this.$swal.mixin({
           toast: true,
@@ -210,9 +198,29 @@ export default {
           icon: 'success',
           title: 'Login is successfully'
         })
-        //to Home by param
+
         this.$router.push({path:'/', params: {data:res}});
-        this.$router.params        
+        } else {
+          const Toast = this.$swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', this.$swal.stopTimer)
+            toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+          }
+        })
+
+        Toast.fire({
+          icon: 'error',
+          title: 'Login is failed'
+        })
+        }
+        //to Home by param
+        
+              
 
       }
       catch (error) { console.log(`login: ${error}`) }
@@ -224,7 +232,7 @@ export default {
 
   },
   async created() {
-    this.infoAccounts = await this.fetchEmailPassword();
+    // this.infoAccounts = await this.fetchEmailPassword();
     this.currentUse = await this.getUser();
   },
 };

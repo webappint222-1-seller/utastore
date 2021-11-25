@@ -8,76 +8,59 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn depressed @click="$router.push('/billpage')" v-bind="attrs" v-on="on">
-              <v-icon small>shopping_basket</v-icon>
-            </v-btn>
-          </template>
-          <span>Check Out</span>
-        </v-tooltip>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn depressed @click="$router.push('/accountpage')" v-bind="attrs" v-on="on">
-              <v-icon small>manage_accounts</v-icon>
-            </v-btn>
-          </template>
-          <span>Manage Account</span>
-        </v-tooltip>
-
-        <div v-if="this.role == null">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn depressed @click="$router.push('/registerpage')" v-bind="attrs" v-on="on">
-              <v-icon small>account_circle</v-icon>
-            </v-btn>
-          </template>
-          <span>Create Account</span>
-        </v-tooltip>
+        <div v-if="this.userRole == 2">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed @click="$router.push('/billpage')" v-bind="attrs" v-on="on">
+                <v-icon small>shopping_basket</v-icon>
+              </v-btn>
+            </template>
+            <span>Check Out</span>
+          </v-tooltip>
         </div>
-        
-          <div v-if="this.role == null">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn depressed @click="$router.push('/loginpage')" v-bind="attrs" v-on="on">
-                  <v-icon small>login</v-icon>
-                </v-btn>
-              </template>
-              <span>Log In</span>
-            </v-tooltip>
-          </div>
-         
-          
-          
-        
+        <div v-if="this.userData != null">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed @click="$router.push('/accountpage')" v-bind="attrs" v-on="on">
+                <v-icon small>manage_accounts</v-icon>
+              </v-btn>
+            </template>
+            <span>Manage Account</span>
+          </v-tooltip>
+        </div>
 
-        <!-- <div v-for="user in userList" :key="user.id"> -->
-          <!-- <div v-if="this.currentUser == 2 && this.currentUser == 1"> -->
-            <!-- <div v-if="this.currentUser != null"> -->
-            <div v-if="this.role != null">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn depressed @click="$router.push('/'), logOut()" v-bind="attrs" v-on="on">
-                  <v-icon small>logout</v-icon>
-                </v-btn>
-              </template>
-              <span>Log Out</span>
-            </v-tooltip>
-            </div>
-            <!-- </div> -->
-          <!-- </div> -->
-          <!-- <div v-else-if="this.currentUser == 1">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn depressed @click="$router.push('/'), logOut()" v-bind="attrs" v-on="on">
-                  <v-icon small>logout</v-icon>
-                </v-btn>
-              </template>
-              <span>Log Out</span>
-            </v-tooltip>
-          </div> -->
-        <!-- </div> -->
+        <div v-if="this.userData == null">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed @click="$router.push('/registerpage')" v-bind="attrs" v-on="on">
+                <v-icon small>account_circle</v-icon>
+              </v-btn>
+            </template>
+            <span>Create Account</span>
+          </v-tooltip>
+        </div>
+
+        <div v-if="this.userData == null">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed @click="$router.push('/loginpage')" v-bind="attrs" v-on="on">
+                <v-icon small>login</v-icon>
+              </v-btn>
+            </template>
+            <span>Log In</span>
+          </v-tooltip>
+        </div>
+      
+        <div v-if="this.userData != null">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed @click="$router.push('/'), logOut()" v-bind="attrs" v-on="on">
+                <v-icon small>logout</v-icon>
+              </v-btn>
+            </template>
+            <span>Log Out</span>
+          </v-tooltip>
+        </div>        
       </v-toolbar>
 
       <v-navigation-drawer app dark v-model="switchLeftNavi">
@@ -128,16 +111,17 @@ export default {
   emits: ['logout'],
   name: 'Navbar',
   // recieve role form Home
+  props: { role: null },
   data() {
     return {
       switchLeftNavi: false,
       selectedHome: false,
       selectedAbout: false,
       selectedTeam: false,
-      // currentUser: null,
       userData: null,
-      role: null,
+      userRole: '',
       url: 'https://www.utastore.team:3006',
+      // url: 'http://localhost:3006',
     }
   },
   components: {
@@ -157,7 +141,7 @@ export default {
       catch (error) { console.log(`Log Out failed: ${error}`) }
     },
 
-  async getUser() {
+    async getUser() {
       if (document.cookie == null) { return }
       try {
         const res = await fetch(this.url + "/getuser", {
@@ -172,42 +156,20 @@ export default {
         console.log(`get user failed: ${error}`)
 
       }
-  }
-  //   getCookie = (name) => {
-  //   const c = document.cookie.split(';').find(c => c.trim().startsWith(name + '='));
-  //   return c ? c.substring((name + '=').length) : null;
-  // }
-    // async getUser() {
-    //   try {
-    //     // console.log(`user: ${typeof this.currentUser}`)
-    //     const res = await fetch(this.url + "/getuser", {
-
-          
-    //       credentials: 'include'
-    //     })
-    //     const getuserdata = await res.json()
-    //     return getuserdata
-    //   }
-    //   catch (error) {
-    //     console.log(`get user failed: ${error}`)
-
-    //   }
-    //   // console.log(`user: ${this.productInfo[0]}`)
-
-    //   // for (let i = 0; i < this.userList.length; i++) {
-    //   //   console.log(`user: ${this.userList[i]}`)
-    //   // }
-    // },
 
 
+      // console.log(`user: ${this.productInfo[0]}`)
+
+    },
   },
 
-  // async created() {
-  //   this.currentUser = await this.getUser();
-  // }
   async created() {
+
     this.userData = await this.getUser();
-    this.role = this.userData.data.role
+    this.userRole = this.userData.data.role
+
+
+    //  console.log(`type: ${this.userData.data}`)
   }
 }
 </script>
