@@ -45,7 +45,7 @@
             </v-btn>
             <v-card dark class="w-80 h-auto mt-10">
               <v-card-text>
-                <validation-observer ref="observer" v-slot="{ invalid }">
+                <validation-observer ref="observer" >
                   <form>
                     <validation-provider v-slot="{ errors }" name="Product Name" rules="required">
                       <v-text-field
