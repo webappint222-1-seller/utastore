@@ -180,26 +180,31 @@ app.post('/formdatausersupload',  multerSigleUpload.single('image'), function (r
   });
 });
 
-app.post('/login',  multerSigleUpload.single('image'), function (req, res) {
+app.post('/login', multerSigleUpload.single('image'), function (req, res) {
   console.log('file received');
   console.log(req);
   var db = "SELECT * FROM user where emailaddress = lower('" + req.body.emailaddress + "')"
   sql.connect((err) => {
     sql.query(db, function (err, result1) {
-      bcrypt.compare(req.body.password, result1[0].password, function (err, result) {
-        if (result == true) {
-          var token = jwt.sign({ id: result1[0].user_id }, 'secrect', { expiresIn: '1d' });
-          console.log(token);
-          res.cookie('jwt', token, { maxAge: 24 * 60 * 60 * 1000 });
-          res.status(200).json({data: 1});
-                  
-        } else {
-          res.status(401).json({data: 0})  
-        }
-      });
+      console.log(result1);
+      if (result1[0] != null) {
+        bcrypt.compare(req.body.password, result1[0].password, function (err, result) {
+          if (result == true) {
+            var token = jwt.sign({ id: result1[0].user_id }, 'secrect', { expiresIn: '1d' });
+            console.log(token);
+            console.log(result1);
+            res.cookie('jwt', token, { maxAge: 24 * 60 * 60 * 1000 });
+            res.status(200).json({data: 1});
+          } else {
+            res.status(401).json({data: 0})
+          }
+        });
+      }
+      else {
+        res.status(401).json({data: 0})
+      }
     });
   });
-
 });
 
 // app.get('/getalluser', multerSigleUpload.single('image'), function (req, res) {
