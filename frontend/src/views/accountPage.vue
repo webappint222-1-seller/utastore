@@ -356,7 +356,7 @@ export default {
     },
 
     async reloadAccount() {
-      this.infoAccounts = await this.getRole()
+      this.userDataFromRole = await this.getRole()
     },
 
     // EDIT
