@@ -115,7 +115,6 @@
                       class="mr-4"
                       @click="submitProductForm"
                       type="submit"
-                      :disabled="invalid"
                     >Submit</v-btn>
                     <v-btn @click="clear">Clear</v-btn>
                   </form>
