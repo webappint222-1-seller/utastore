@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', "http://localhost:8080");
+  res.header('Access-Control-Allow-Origin', "https://www.utastore.team:3006");
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
@@ -30,10 +30,10 @@ const options = {
   cert: fs.readFileSync('etc/cert.pem')
 };
 
-const whitelist ="http://localhost:8080";
+const whitelist ="https://www.utastore.team:3006";
 const corsOptions = {
   origin: (origin,callback,res)=> {
-    if(!origin ||  whitelist.indexOf(origin) !== -1){
+    if(whitelist.indexOf(origin) !== -1){
       callback(null, true)
     }else{
       callback(status[401] + " you dont have right to enter this page")
