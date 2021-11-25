@@ -5,8 +5,8 @@ const cors = require('cors');
 const app = express();
 const sql = require("./app/models/db.js");
 const cookieParser = require('cookie-parser')
-const { signupValidation, loginValidation } = require("./app/models/validation.js");
-const { validationResult } = require('express-validator');
+// const { signupValidation, loginValidation } = require("./app/models/validation.js");
+// const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -361,7 +361,7 @@ app.post('/checkout', multerSigleUpload.single('image'), (req, res, next) => {
   res.redirect('/');
 });
 
-app.get('/getalluser', signupValidation, multerSigleUpload.single('image'), function (req, res) {
+app.get('/getalluser', multerSigleUpload.single('image'), function (req, res) {
   var db = "SELECT * FROM user"
   sql.query(db, function (err , result){
     res.send(result);
