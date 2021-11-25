@@ -105,7 +105,7 @@ app.post('/formdataupload', multerSigleUpload.single('image'), function (req, re
 
 app.put('/productupdate/:productId', multerSigleUpload.single('image'), function (req, res, next) {
 
-  var db = "UPDATE product SET product_name = '" + req.body.product_name + "', band_name = '" + req.body.band_name + "' , price = '" + req.body.price + "',product_des = '" + req.body.product_des + "',image = '" + suff + ".png" + "' WHERE product_id = '" + req.params.productId + "'"
+  var db = "UPDATE product SET product_name = '" + req.body.product_name + "', band_name = '" + req.body.band_name + "' , price = '" + req.body.price + "',product_des = '" + req.body.product_des + "',image = '" + req.file.originalname + "' WHERE product_id = '" + req.params.productId + "'"
   sql.query(db, function (err, result) {
     console.log(db);
     console.log(result);

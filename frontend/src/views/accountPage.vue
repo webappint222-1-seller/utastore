@@ -20,7 +20,7 @@
                             <li class="pt-2 font-bold">Name:</li>
                             <li>{{ a.name }}</li>
                             <li class="pt-2 font-bold">Phone:</li>
-                            <li>0{{ a.phonenumber }}</li>
+                            <li>{{ a.phonenumber }}</li>
                             <li class="pt-2 font-bold">Date of Birth:</li>
                             <li>{{ a.DOB }}</li>
                             <li class="pt-2 font-bold">Address:</li>
