@@ -137,7 +137,7 @@
         <v-flex xs12 sm6 md6 lg4 wrap v-for="uta in productInfo" :key="uta.id" justify-center>
           <v-card dark flat class="pa-2 w-52 h-auto my-10">
             <v-responsive class>
-              <img :src="`${url}/upload/${uta.image}`" class="w-52 h-auto" />
+              <img :src="`${uta.image}`" class="w-52 h-auto" />
             </v-responsive>
 
             <v-card-text class="justify-center text-xs break-words white--text">
