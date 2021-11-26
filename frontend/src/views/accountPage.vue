@@ -37,7 +37,7 @@
                             
                           <div v-if="userRole == 1" class= "ml-2" >
                             <v-btn
-                              @click="deleteAccount(a.user_id)"
+                              @click="deleteAccount(a.user_id),reloadAccount()"
                               class
                               color="red darken-4"
                               small
@@ -358,7 +358,7 @@ export default {
     async reloadAccount() {
       this.userDataFromRole = await this.getRole()
     },
-
+    
     // EDIT
 
     showAccount(accountInfo) {
