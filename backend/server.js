@@ -1,3 +1,4 @@
+const ImgurStorage = require('multer-storage-imgur');
 const express = require("express");
 const bodyParser = require("body-parser");
 // var upload = multer();
@@ -61,17 +62,17 @@ const multer = require('multer');
 
 const suff = Date.now();
 
-const storage = multer.diskStorage({
-  destination: function (request, file, callback) {
-    callback(null, './public/upload')
-  },
-  filename: function (res, file, callback) {
-    callback(null, file.originalname)
-  }
-});
+// const storage = multer.diskStorage({
+//   destination: function (request, file, callback) {
+//     callback(null, './public/upload')
+//   },
+//   filename: function (res, file, callback) {
+//     callback(null, file.originalname)
+//   }
+// });
 
 const multerSigleUpload = multer({
-  storage: storage
+  storage: ImgurStorage({ clientId: 'e9e3586f3198f4e' })
 });
 app.use('/upload', express.static('public'));
 
@@ -88,15 +89,14 @@ app.post('/formdataupload', multerSigleUpload.single('image'), function (req, re
     sql.connect((err) => {
       sql.query('SELECT * FROM user where user_id=' + decoded.id, function (error, results) {
         if (results[0].role == 1) {
-          var db = "INSERT INTO `product`(`product_name`, `band_name`, `price`,`product_des`,`image`) VALUES ('" + req.body.product_name + "', '" + req.body.band_name + "', '" + req.body.price + "','" + req.body.product_des + "','" + req.file.originalname + "')";
+          var db = "INSERT INTO product(product_name, band_name, price,product_des,image) VALUES ('" + req.body.product_name + "', '" + req.body.band_name + "', '" + req.body.price + "','" + req.body.product_des + "','" +  req.file.link + "')";
           sql.query(db, function (err, result) {
             console.log('inserted data');
             console.log(db);
             console.log(result);
+            console.log(req.file);
           });
-        } else {
-          return res.status(401).send("must be admin to add product")
-        }
+        } else{ res.status(401).json({data: 0})}
       });
     });
   }
@@ -104,15 +104,13 @@ app.post('/formdataupload', multerSigleUpload.single('image'), function (req, re
 });
 
 app.put('/productupdate/:productId', multerSigleUpload.single('image'), function (req, res, next) {
-
-  var db = "UPDATE product SET product_name = '" + req.body.product_name + "', band_name = '" + req.body.band_name + "' , price = '" + req.body.price + "',product_des = '" + req.body.product_des + "',image = '" + req.file.originalname + "' WHERE product_id = '" + req.params.productId + "'"
+  var db = "UPDATE product SET product_name = '" + req.body.product_name + "', band_name = '" + req.body.band_name + "' , price = '" + req.body.price + "',product_des = '" + req.body.product_des + "',image = '" + req.file.link + "' WHERE product_id = '" + req.params.productId + "'"
   sql.query(db, function (err, result) {
     console.log(db);
     console.log(result);
+    console.log(req.file.link);
   });
-
-res.redirect('/');
-
+  res.redirect('/');
 });
 
 app.delete('/products/:productId', multerSigleUpload.single('image'), (req, res) => {
@@ -260,13 +258,22 @@ app.put('/updateuserinfo/:userid', multerSigleUpload.single('image'), function (
 });
 
 app.delete('/deleteuserinfo/:userid', multerSigleUpload.single('image'), function (req, res) {
-  var db = "Delete from user where user_id = '" + req.params.userid + "'";
-            sql.query(db, function (err, result) {
-              console.log('inserted data');
-              console.log(db);
-              console.log(result);
-            });
-    res.redirect('/');
+  var db = "delete orderdetail_has_product  from orderdetail_has_product  join orderdetail  where orderdetail.order_id = orderdetail_has_product.orderdetail_order_id and orderdetail.user_user_id = '"+ req.params.userid +"' ;"
+  sql.query(db, function (err, result) {
+    console.log(db);
+    console.log(result);
+    var db1 = "delete from orderdetail where user_user_id = '"+ req.params.userid +"' ;"
+    sql.query(db1, function (err, result1) {
+      console.log(db1);
+      console.log(result1);
+      var db2 = "Delete from user where user_id = '"+ req.params.userid +"' ;"
+      sql.query(db2, function (err, result2) {
+        console.log(db2);
+        console.log(result2);
+      });
+    });
+  });
+  res.redirect('/');
 });
 
 app.post('/clearuser', multerSigleUpload.single('image'), (req, res, next) => {
