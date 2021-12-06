@@ -148,7 +148,6 @@ export default {
           credentials: 'include'
         })
         const getuserdata = await res.json()
-        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.name}`)
 
         return getuserdata
       }

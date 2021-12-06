@@ -179,7 +179,6 @@ export default {
         })                  
         // const res = await this.getUser()
         const data = await res.json()
-        console.log(`data: ${data.data}`)  
         if(data.data == 1){
 
         const Toast = this.$swal.mixin({
@@ -224,8 +223,6 @@ export default {
 
       }
       catch (error) { console.log(`login: ${error}`) }
-      console.log(`email2: ${emailPasword.email}`)
-      console.log(`password2: ${emailPasword.password}`)
 
     },
 

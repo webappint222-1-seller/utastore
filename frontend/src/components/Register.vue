@@ -203,7 +203,6 @@ export default {
 
       this.$emit('register-user', userRegister)
       this.$refs.observer.reset()
-      console.log(`userRegis: ${typeof userRegister.emailaddress} ${userRegister.emailaddress}`)
       
       this.enteredEmail = ''
       this.enteredPassword = ''

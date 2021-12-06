@@ -132,7 +132,6 @@ export default {
           credentials: 'include'
         })
         const getuserdata = await res.json()
-        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.name}`)
 
         return getuserdata
       }
@@ -199,7 +198,6 @@ export default {
       formData.append('total_price_product_id', product.total_price_product_id)
       formData.append('order_id', product.order_id)
 
-      console.log(`orderId: ${product.order_id}`)
 
       try {
         const res = await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
@@ -234,16 +232,12 @@ export default {
           } : cInfo
         )
       }
-      catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
+      catch (error) { console.log(`add quantity to cart failed: ${error}`) }
 
     },
 
-    show() {
-      console.log(`show!!!`)
-    },
 
     countPiece() {
-      console.log(`in loop`)
       for (let i = 0; i < this.cartInfo.length; i++) {
         // let q = this.q
         this.totalQuantity += this.cartInfo[i].order_quantity
@@ -253,7 +247,6 @@ export default {
     },
 
     countPrice() {
-      console.log(`in price ${this.cartInfo[0].totalprice}`)
       for (let i = 0; i < this.cartInfo.length; i++) {
         this.totalPrice += this.cartInfo[i].total_price_product_id
         this.click = true;

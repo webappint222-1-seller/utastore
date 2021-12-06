@@ -370,7 +370,6 @@ export default {
 
     uploadImage(event) {
       const imgFile = event.target.files[0]
-      console.log(event.target)
       if (imgFile.type.includes('image')) {
         const readImage = new FileReader()
         readImage.onload = (e) => {
@@ -398,12 +397,6 @@ export default {
       // this.desErrors = this.desForm === ''
       // this.fileErrors = this.fileForm === null
 
-
-      console.log(`productName: ${typeof this.nameForm} ${this.nameForm}`)
-      console.log(`bandName: ${typeof this.bandForm} ${this.bandForm}`)
-      console.log(`productPrice: ${typeof this.priceForm} ${this.priceForm}`)
-      console.log(`productDes: ${typeof this.desForm} ${this.desForm}`)
-      console.log(`image: ${this.fileForm}`)
 
       if (this.nameForm !== '' &&
         this.bandForm !== '' &&
@@ -457,7 +450,6 @@ export default {
       const formData = new FormData()
       formData.append('product_name', this.searchForm)
       if (this.searchForm == null) { return this.productInfo = await this.getProductForm() }
-      console.log(`search null data: ${typeof this.searchForm} ${this.searchForm}`)
       try {
         const res = await fetch(this.url + "/searchproduct", {
           method: 'POST',
@@ -467,7 +459,6 @@ export default {
         })
         const data = await res.json()
         this.productInfo = data
-        console.log(`search data: ${typeof this.searchForm} ${this.searchForm}`)
       }
       catch (error) { console.log(`search failed: ${error}`) }
     },
@@ -554,15 +545,10 @@ export default {
       formData.append('order_quantity', this.defaultQuantity)
       formData.append('product_id', this.product_id)
       formData.append('product_name', this.nameForm)
-      console.log(`----`)
-      console.log(`priceincart: ${this.priceForm}`)
-      console.log(`quantityincart: ${this.defaultQuantity}`)
-      console.log(`productId: ${this.product_id}`)
 
 
       for (let i = 0; i < this.cartInfo.length; i++) {
         if (this.cartInfo[i].product_name == this.nameForm) {
-          console.log(`productName2: ${this.nameForm}`)
           return this.editQuantity(this.cartInfo[i])
         }
       }
@@ -587,7 +573,6 @@ export default {
           // })
           body: formData
         })
-        console.log(`productName: ${this.nameForm}`)
 
         // const data = await res.json()
         // console.log(`dataid:${data.id}`)
@@ -627,7 +612,6 @@ export default {
       formData.append('total_price_product_id', product.total_price_product_id)
       formData.append('order_id', product.order_id)
 
-      console.log(`orderId: ${product.order_id}`)
 
       try {
         await fetch(`${this.url}/checkoutedit/${product.order_id}`, {
@@ -663,7 +647,7 @@ export default {
         //   } : cInfo
         // )
       }
-      catch (error) { console.log(`add quantity to cart failed: ${error}`), console.log(`${this.cartInfo[0].name}`) }
+      catch (error) { console.log(`add quantity to cart failed: ${error}`) }
 
     },
 
@@ -702,7 +686,6 @@ export default {
           credentials: 'include'
         })
         const getuserdata = await res.json()
-        console.log(`usedata: ${typeof getuserdata} ${getuserdata.data.name}`)
 
         return getuserdata
       }
@@ -767,14 +750,6 @@ export default {
       var editImage = document.getElementById("imgid")
       editImage.src = this.url + "/upload/" + utaInfo.image
 
-      // console.log(`info: ${utaInfo}`)
-      // console.log(`id: ${utaInfo.product_id}`)
-      // console.log(`name: ${utaInfo.product_name}`)
-      // console.log(`band: ${utaInfo.band_name}`)
-      // console.log(`price: ${utaInfo.price}`)
-      // console.log(`des: ${utaInfo.product_des}`)
-      // console.log(`file: ${utaInfo.image}`)
-      // console.log(`showedit: ${this.showEditProduct.product_id}`)
 
     },
 
@@ -798,15 +773,8 @@ export default {
       formData.append('price', this.priceForm)
       formData.append('product_des', this.desForm)
 
-      console.log(`productName: ${typeof this.nameForm} ${this.nameForm}`)
-      console.log(`bandName: ${typeof this.bandForm} ${this.bandForm}`)
-      console.log(`productPrice: ${typeof this.priceForm} ${this.priceForm}`)
-      console.log(`productDes: ${typeof this.desForm} ${this.desForm}`)
-      console.log(`image: ${this.fileForm}`)
-
 
       try {
-        console.log(`id2: ${this.editId}`)
         await fetch(`${this.url}/productupdate/${this.editId}`, {
           method: 'PUT',
           // credentials: 'include',

@@ -348,7 +348,7 @@ export default {
           method: 'DELETE'
         })
         // this.infoAccounts = this.infoAccounts.filter(a => a.id !== deleteAccountId)
-        this.reloadAccount()
+        await this.reloadAccount()
       }
       catch (error) {
         console.log(`delete account failed: ${error}`)

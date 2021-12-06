@@ -49,9 +49,7 @@ export default {
 
     confirmRegis(infoRegister) {
       this.reloadUser();
-      console.log(this.userList[0])
       // this.$refs.observer.validate()
-      console.log(`email: ${infoRegister.emailaddress}`)
       this.$swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -63,8 +61,6 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           // console.log(`account: ${Array.isArray(this.infoAccounts)} ${this.infoAccounts.length}`)
-          console.log(`regis: ${Array.isArray(infoRegister)} ${infoRegister.emailaddress}`)
-          console.log(`userList: ${Array.isArray(this.userList)} ${this.userList}`)
           // console.log(`infoAccounts: ${this.infoAccounts[0].emailaddress}`)
           // console.log(`value: ${this.infoAccounts = this.infoAccounts.filter((info) => info.emailaddress == infoRegister.emailaddress)}`)
           this.userList = this.userList.filter(
@@ -115,12 +111,6 @@ export default {
       // } else {
       // this.$alert("Registe success");
 
-      console.log(`email: ${typeof infoRegister.emailaddress} ${infoRegister.emailaddress}`)
-      console.log(`pass: ${typeof infoRegister.password} ${infoRegister.password}`)
-      console.log(`name: ${typeof infoRegister.name} ${infoRegister.name}`)
-      console.log(`phone: ${typeof infoRegister.phonenumber} ${infoRegister.phonenumber}`)
-      console.log(`dob: ${typeof infoRegister.dob} ${infoRegister.dob}`)
-      console.log(`address: ${typeof infoRegister.address} ${infoRegister.address}`)
 
       const formData = new FormData()
       formData.append('emailaddress', infoRegister.emailaddress)
@@ -148,7 +138,6 @@ export default {
       const data = await res.json()
       this.infoResults = [...this.infoResults, data]
       // this.$alert("Registe success");
-      console.log(`save`)
       // this.$refs.observer.validate()
     }
     ,
