@@ -1,6 +1,6 @@
 module.exports = {
-  HOST: "db-project222.mysql.database.azure.com",
-  USER: "adminnaja@db-project222.mysql.database.azure.com",
+  HOST: "db222.mysql.database.azure.com",
+  USER: "adminnaja@db222",
   PASSWORD: "Password@Project222",
   DB: "mydb"
 };
